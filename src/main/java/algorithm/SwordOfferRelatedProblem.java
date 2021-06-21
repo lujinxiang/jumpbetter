@@ -118,6 +118,7 @@ public class SwordOfferRelatedProblem {
      * 题目：输入两个链表，找出它们的第一个公共结点。
      */
 
+
     /**
      * 链表中环的入口结点
      * <p>
@@ -886,11 +887,53 @@ public class SwordOfferRelatedProblem {
 
     /**
      * 机器人的运动范围
-     *
+     * <p>
      * 题目：地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，
      * 但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。
      * 但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子？
      */
+    public static int movingCount(int rows, int cols, int target) {
+        if (target < 0 || rows <= 0 || cols <= 0) {
+            return 0;
+        }
+        boolean[] visited = new boolean[rows * cols];
+        for (int i = 0; i < rows * cols; i++) {
+            visited[i] = false;
+        }
+        int count = movingCountCore(target, rows, cols, 0, 0, visited);
+
+        return count;
+    }
+
+    private static int movingCountCore(int target, int rows, int cols, int row, int col, boolean[] visited) {
+        int count = 0;
+        if (check(target, rows, cols, row, col, visited)) {
+            visited[row * cols + col] = true;
+            //当前(i,j)处的格子 + 遍历四个相邻的格子
+            count += 1 + movingCountCore(target, rows, cols, row - 1, col, visited)
+                    + movingCountCore(target, rows, cols, row, col - 1, visited)
+                    + movingCountCore(target, rows, cols, row + 1, col, visited)
+                    + movingCountCore(target, rows, cols, row, col + 1, visited);
+        }
+        return count;
+    }
+
+    private static boolean check(int target, int rows, int cols, int row, int col, boolean[] visited) {
+        if (row >= 0 && row < rows && col >= 0 && col < cols && getDigitSum(row) + getDigitSum(col) <= target && !visited[row * cols + col]) {
+            return true;
+        }
+        return false;
+    }
+
+    private static int getDigitSum(int number) {
+        int sum = 0;
+        while (number > 0) {
+            sum += number % 10;
+            number = number / 10;
+        }
+        return sum;
+    }
+
 
     //其他问题
     /**
@@ -1113,4 +1156,5 @@ public class SwordOfferRelatedProblem {
      * 例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，那么一共存在6个滑动窗口，
      * 他们的最大值分别为{4,4,6,6,6,5}。
      */
+
 }

@@ -135,8 +135,8 @@ public class TreeRelatedProblem {
         }
         Queue<TreeNode> queue = new LinkedList<>();
         int level = 1;
-        TreeNode last = head;
-        TreeNode nLast = null;
+        TreeNode last = head;//指向当前行
+        TreeNode nLast = null;//指向下一行
         queue.offer(head);
         System.out.print("Level " + (level++) + ":");
         while (!queue.isEmpty()) {
@@ -157,6 +157,12 @@ public class TreeRelatedProblem {
         }
         System.out.println();
     }
+
+    /**
+     * zigZag打印的实现
+     *
+     *
+     */
 
     /**
      * 打印二叉树的边界节点
@@ -382,4 +388,30 @@ public class TreeRelatedProblem {
         return parents;
     }
 
+    /**
+     * 通过先序和中序数组生成后序数组
+     * <p>
+     * 题目：已知一棵二叉树所有的节点值都不同 给定这棵树正确的先序和中序数组 不要重建整颗树
+     * 而是通过这两个数组直接生成正确的后续数组
+     */
+
+
+    /**
+     * 统计和生成所有不同的二叉树
+     * <p>
+     * 题目：给定一个整数N 如果N<1 代表空树结构 否则代表中序遍历的结果为{1,2,3,...N} 返回可能的二叉树结构有多少？
+     */
+    public static int numTrees(int n) {
+        if (n < 2) {
+            return 1;
+        }
+        int[] num = new int[n + 1];
+        num[0] = 1;
+        for (int i = 1; i < n + 1; i++) {
+            for (int j = 1; j < i + 1; j++) {
+                num[i] += num[j - 1] * num[i - j];
+            }
+        }
+        return num[n];
+    }
 }

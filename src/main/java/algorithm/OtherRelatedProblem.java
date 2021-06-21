@@ -1,7 +1,11 @@
 package algorithm;
 
+
+import lombok.SneakyThrows;
+
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * 其他相关的问题
@@ -18,6 +22,11 @@ import java.util.Iterator;
  * 9.工厂模式的实现
  */
 public class OtherRelatedProblem {
+
+    public static void main(String[] args) {
+        PrintThread printThread = new PrintThread();
+        printThread.printThreadNumber();
+    }
 
     /**
      * 单例设计模式
@@ -164,5 +173,95 @@ public class OtherRelatedProblem {
     }
 
 
+    /**
+     * 两个线程交替打印
+     */
+
+    static class PrintThread {
+        private volatile boolean flag = false;
+        private volatile int num = 1;
+        Object object = new Object();
+
+        public void printThreadNumber() {
+            Thread thread = new Thread(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    while (num < 10) {
+                        if (flag) {
+                            synchronized (object) {
+                                System.out.println(Thread.currentThread().getName() + ":" + num++);
+                            }
+                        }
+                        flag = false;
+                        Thread.sleep(5000);
+                    }
+                }
+            });
+            Thread thread2 = new Thread(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    while (num < 10) {
+                        if (!flag) {
+                            synchronized (object) {
+                                System.out.println(Thread.currentThread().getName() + ":" + num++);
+                            }
+                        }
+                        flag = true;
+                        Thread.sleep(10000);
+                    }
+                }
+            });
+            thread2.start();
+            thread.start();
+        }
+    }
+
+    /**
+     * 生产者消费者模型实现
+     */
+
+    static class Producer {
+        private Resource resource;
+
+        private ArrayBlockingQueue<Resource> arrayBlockingQueue;
+
+        public Producer(Resource resource) {
+            this.resource = resource;
+        }
+
+        public void produceResource() {
+            arrayBlockingQueue.offer(resource);
+            resource.resourceIndex++;
+        }
+
+    }
+
+    static class Consumer {
+        private Resource resource;
+
+        private ArrayBlockingQueue<Resource> arrayBlockingQueue;
+
+        public Consumer(Resource resource) {
+            this.resource = resource;
+        }
+
+        public void consumeResource() {
+            arrayBlockingQueue.poll();
+            resource.resourceIndex--;
+        }
+
+    }
+
+    static class Resource {
+        private String resourceName;
+        private Integer resourceIndex;
+
+        public Resource(String resourceName, Integer resourceIndex) {
+            this.resourceIndex = resourceIndex;
+            this.resourceName = resourceName;
+        }
+    }
 
 }

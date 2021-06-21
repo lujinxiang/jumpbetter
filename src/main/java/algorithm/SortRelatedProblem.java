@@ -14,16 +14,34 @@ public class SortRelatedProblem {
     public static void main(String[] args) {
         int[] arrayInstance = ArrayUtil.getArrayInstance();
         ArrayUtil.recursiveArray(arrayInstance);
-        heapSort(arrayInstance);
+        insertSort(arrayInstance);
         ArrayUtil.recursiveArray(arrayInstance);
     }
 
     /**
      * 1.插入排序
      */
-    public static int[] insertSort(int[] arr) {
+    public static void insertSort(int[] arr) {
+        //数组为空或者只有一个数字时返回
+        if (arr == null || arr.length < 2)
+            return;
+        //定义temp来保存当前的数
+        int temp = 0;
+        int j;
+        for (int i = 1; i < arr.length; i++) {
+            temp = arr[i];
+            for (j = i - 1; j >= 0; j--) {
 
-        return null;
+                if (temp < arr[j]) {
+                    arr[j + 1] = arr[j];
+                } else {
+                    //遇到比temp小的数时跳出当前循环
+                    break;
+                }
+            }
+            //j位置的数即为比temp小的数，因此插到后一位
+            arr[j + 1] = temp;
+        }
     }
 
 
@@ -50,9 +68,37 @@ public class SortRelatedProblem {
      * 3.归并排序
      */
     public static void mergeSort(int[] arr) {
-
+        mergeSort(arr, 0, arr.length - 1);
     }
 
+    private static void mergeSort(int[] arr, int low, int high) {
+        int mid = (low + high) / 2;
+        if (low < high) {
+            mergeSort(arr, low, mid);
+            mergeSort(arr, mid + 1, high);
+            merge(arr, low, mid, high);
+        }
+    }
+
+    //两路归并算法，两个排好序的子序列合并为一个子序列
+    private static void merge(int[] a, int left, int mid, int right) {
+        int[] tmp = new int[a.length];//辅助数组
+        int p1 = left, p2 = mid + 1, k = left;//p1、p2是检测指针，k是存放指针
+
+        while (p1 <= mid && p2 <= right) {
+            if (a[p1] <= a[p2])
+                tmp[k++] = a[p1++];
+            else
+                tmp[k++] = a[p2++];
+        }
+
+        while (p1 <= mid) tmp[k++] = a[p1++];//如果第一个序列未检测完，直接将后面所有元素加到合并的序列中
+        while (p2 <= right) tmp[k++] = a[p2++];//同上
+
+        //复制回原素组
+        for (int i = left; i <= right; i++)
+            a[i] = tmp[i];
+    }
 
     /**
      * 4.冒泡排序
@@ -133,29 +179,35 @@ public class SortRelatedProblem {
     }
 
     private static void quickSort(int[] arr, int left, int right) {
-        int tempLeft = left;
-        int tempRight = right;
-        while (left < right) {
-            while (left < right) {
-                if (arr[right] < arr[left]) {
-                    int temp = arr[left];
-                    arr[right] = arr[left];
-                    arr[left] = temp;
-                    right--;
-                }
-                break;
+        int i, j, temp, t;
+        if (left > right) {
+            return;
+        }
+        i = left;
+        j = right;
+        //temp就是基准位
+        temp = arr[left];
+        while (i < j) {
+            //先看右边 依次往左递减
+            while (temp <= arr[j] && i < j) {
+                j--;
             }
-            while (left < right) {
-                if (arr[left] > arr[left]) {
-                    ArrayUtil.swap(arr, left, right);
-                    left++;
-                }
-                break;
+            //再看左边 依次往右递增
+            while (temp >= arr[i] && i < j) {
+                i++;
+            }
+            //如果满足条件则交换
+            if (i < j) {
+                t = arr[j];
+                arr[j] = arr[i];
+                arr[i] = t;
             }
         }
-        int tempMid = (tempLeft + tempRight) / 2;
-        quickSort(arr, tempLeft, left);
-        quickSort(arr, tempMid + 1, tempRight);
+        //最后将基准与i和j相等位置的数字交换
+        arr[left] = arr[i];
+        arr[i] = temp;
+        quickSort(arr, left, j - 1);
+        quickSort(arr, j + 1, right);
     }
 
 
@@ -163,4 +215,9 @@ public class SortRelatedProblem {
      * 7.基数排序
      */
 
+
+
+    /**
+     * 8.希尔排序
+     */
 }
