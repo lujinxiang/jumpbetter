@@ -1,5 +1,7 @@
 package algorithm;
 
+import java.util.HashMap;
+
 /**
  * 动态规划相关的问题
  */
@@ -24,9 +26,49 @@ public class DynamicRelatedProblem {
         int aim = 15;
         int res = changeMoneyMethod4(arr2, aim);
         System.out.println(res);*/
-        int length = 8;
+    /*    int length = 8;
         int maxProductAfterCutting = getMaxProductAfterCutting(length);
-        System.out.println(maxProductAfterCutting);
+        System.out.println(maxProductAfterCutting);*/
+/*
+
+        String str1 = "1AB2345CD";
+        String str2 = "12345EF";
+        String maxCommonString = getMaxCommonString(str1, str2);
+        System.out.println(maxCommonString);
+*/
+/*        String str1 = "abc";
+        String str2 = "abc";
+        int ic = 5;
+        int dc = 3;
+        int rc = 2;
+        int i = minCost(str1, str2, ic, dc, rc);
+        System.out.println(i);*/
+    /*    int[] arr = new int[]{3, 2, 3, 1, 1, 4};
+        int jump = jump(arr);
+        System.out.println(jump);
+
+        String s1 = "AB";
+        String s2 = "12";
+        String aim = "A1B2";
+        boolean cross = isCross(s1, s2, aim);
+        System.out.println(cross);*/
+/*
+        int[][] map = new int[][]{
+                {-2, -3, 3},
+                {-5, -10, 1},
+                {0, 30, -5}
+        };
+        int i = minHp(map);
+        System.out.println(i);*/
+      /*  int[] arr = new int[]{3, 3, 2, 3};
+        int maxValue = getMaxValue(arr);
+        System.out.println(maxValue);*/
+       /* String str = "abfdgdfd789abcdefdfkkff";
+        String maxSubString = getMaxSubString(str);
+        System.out.println(maxSubString);*/
+
+        int aba = minCut("ABA");
+        System.out.println(aba);
 
     }
 
@@ -423,30 +465,112 @@ public class DynamicRelatedProblem {
 
     /**
      * 最长公共子串
-     *
+     * <p>
      * 题目：给定两个字符串str1和str2 返回两个字符串的最长公共子串
-     *
+     * <p>
      * example：str1="1AB2345CD" str2="12345EF" 返回2345
-     *
+     * <p>
      * 思路：
-     * 1.确定dp的含义：
+     * 1.确定dp的含义：dp[i][j]代表 在必须把str1[i]和str2[j]当作公共子串最后一个字符的情况下 公共子串最长能有多长
+     * <p>
      * 2.确定dp的公式：
+     * dp[i][j]=0                  str1[i]!=str2[j]
+     * dp[i][j]=dp[i-1][j-1]+1     str1[i]==str2[j]
+     * <p>
      * 3.dp进行初始化：
+     * dp[i][0]=1                  str1[i]==str2[0]
+     * dp[i][0]=0                  str1[i]!=str2[0]
+     * dp[0][j]=0                  str1[0]!=str2[j]
+     * dp[0][j]=1                  str1[0]==str2[j]
      */
+
+    public static String getMaxCommonString(String str1, String str2) {
+        if (str1 == null || str2 == null || str1.equals("") || str2.equals("")) {
+            return "";
+        }
+        char[] chas1 = str1.toCharArray();
+        char[] chas2 = str2.toCharArray();
+        int[][] dp = getDp(chas1, chas2);
+        int end = 0;//end用于记录长度为max的字符下标
+        int max = 0;
+        for (int i = 0; i < chas1.length; i++) {
+            for (int j = 0; j < chas2.length; j++) {
+                if (dp[i][j] > max) {
+                    end = i;
+                    max = dp[i][j];
+                }
+            }
+        }
+        return str1.substring(end - max + 1, end + 1);
+    }
+
+    private static int[][] getDp(char[] str1, char[] str2) {
+        int[][] dp = new int[str1.length][str2.length];
+        for (int i = 0; i < str1.length; i++) {
+            if (str1[i] == str2[0]) {
+                dp[i][0] = 1;
+            }
+        }
+        for (int j = 1; j < str2.length; j++) {
+            if (str1[0] == str2[j]) {
+                dp[0][j] = 1;
+            }
+        }
+        for (int i = 1; i < str1.length; i++) {
+            for (int j = 1; j < str2.length; j++) {
+                if (str1[i] == str2[j]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+            }
+        }
+        return dp;
+    }
 
 
     /**
      * 最小编辑代价
-     *
+     * <p>
      * 题目：给定两个字符str1和str2 再给定三个整数ic、dc和rc 分别代表插入、删除和替换一个字符的代价
-     *      返回将str1编辑成str2的最小代价
-     *
+     * 返回将str1编辑成str2的最小代价
+     * <p>
      * 思路：
      * 1.确定dp的含义：dp[i][j]代表str1[0...i-1]编辑成str2[0...j-1]的最小代价
      * 2.确定dp的公式：
      * 3.对dp初始化:
+     * <p>
+     * 操作类型：
+     * 1.dc:删除操作；delete controller
+     * 2.ic:插入操作；insert controller
+     * 3.rc:替换操作；replace controller
      */
-
+    public static int minCost(String str1, String str2, int ic, int dc, int rc) {
+        if (str1 == null || str2 == null) {
+            return 0;
+        }
+        char[] chas1 = str1.toCharArray();
+        char[] chas2 = str2.toCharArray();
+        int row = chas1.length + 1;
+        int col = chas2.length + 1;
+        int[][] dp = new int[row][col];
+        for (int i = 1; i < row; i++) {
+            dp[i][0] = dc * i;
+        }
+        for (int j = 1; j < col; j++) {
+            dp[0][j] = ic * j;
+        }
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (chas1[i - 1] == chas2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i - 1][j - 1] + rc;
+                }
+                dp[i][j] = Math.min(dp[i][j], dp[i][j - 1] + ic);
+                dp[i][j] = Math.min(dp[i][j], dp[i - 1][j] + dc);
+            }
+        }
+        return dp[row - 1][col - 1];
+    }
 
     /**
      * 剪绳子
@@ -503,18 +627,307 @@ public class DynamicRelatedProblem {
      * 3.dp进行初始化：
      */
 
-    /**
-     * N皇后问题
-     *
-     * 题目：N皇后问题是指在N*N的棋盘上要摆N个皇后 要求任何两个皇后不同行、不同列 也不在一条斜线上
-     * 给定一个整数n 返回n皇后的摆法有多少种？
-     *
-     *
-     */
-
 
     /**
      *
      */
+
+    /**
+     * 跳跃游戏
+     * <p>
+     * 题目：给定数组arr arr[i]==k 代表可以从位置i向右跳1-k个距离；比如arr[2]==3 代表从位置2可以跳到位置3、位置4或位置5
+     * 如果从位置0出发 返回最少跳几次能跳到arr最后的位置上
+     * <p>
+     * 思路：三个变量
+     * 1.jump: 代表目前跳了多少步
+     * 2.cur:  代表如果只跳jump步 最远能够达到的位置
+     * 3.next: 代表如果再多跳一步 最远能够达到的位置
+     * <p>
+     * case1:cur<i:说明只跳jump不能到达位置i 需要多跳一步才行
+     * case2:cur>i:说明跳jump步可以到达位置i 此时什么都不要做
+     */
+    public static int jump(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int jump = 0;
+        int cur = 0;
+        int next = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (cur < i) {
+                jump++;
+                cur = next;
+            }
+            next = Math.max(next, i + arr[i]);
+        }
+        return jump;
+    }
+
+    /**
+     * 数组中的最长连续序列
+     * <p>
+     * 题目：给定无序数组arr 返回其中最长的连续序列的长度
+     * 例子：arr=[100,4,200,1,3,2] 最长的连续序列为[1,2,3,4] 所以返回4；
+     * <p>
+     * 思路：使用HashMap来进行数的存储分析
+     * <p>
+     * HashMap的含义：
+     * 1.key:   代表遍历过的某个数
+     * 2.value: 代表这个数所在的最长连续序列的长度
+     */
+    public static int getLongestConsecutive(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int max = 1;
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            if (!map.containsKey(arr[i])) {
+                map.put(arr[i], 1);
+            }
+            if (map.containsKey(arr[i] - 1)) {
+                max = Math.max(max, merge(map, arr[i] - 1, arr[i]));
+            }
+            if (map.containsKey(arr[i] + 1)) {
+                max = Math.max(max, merge(map, arr[i], arr[i] + 1));
+            }
+        }
+        return max;
+    }
+
+    private static int merge(HashMap<Integer, Integer> map, int less, int more) {
+        int left = less - map.get(less) + 1;
+        int right = more + map.get(more) - 1;
+        int len = right - left + 1;
+        map.put(left, len);
+        map.put(right, len);
+        return len;
+    }
+
+    /**
+     * 字符串的交错组成
+     * <p>
+     * 题目：给定三个字符串str1、str2和aim 如果aim包含且仅包含来自str1和str2的所有字符
+     * 而且在aim中属于str1的字符之间保持原来在str1中的顺序 属于str2的字符之间保持原来在str2中的顺序
+     * 那么称aim是str1和str2的交错组成 实现一个函数 判断aim是否是str1和str2的交错组成
+     * <p>
+     * 例子：str1="AB" str2="12" 那么"AB12"、"A1B2"、"A12B"等都是str1和str2的交错组成
+     * <p>
+     * 思路：
+     * 1.确定dp的含义：dp[i][j]的值代表aim[0...i+j-1]能否被str1[0...i-1]和str2[0...j-1]交错组成
+     * 2.确定dp的公式：
+     * 3.确定dp初始化：
+     */
+    public static boolean isCross(String str1, String str2, String aim) {
+        if (str1 == null || str2 == null || aim == null) {
+            return false;
+        }
+        char[] chas1 = str1.toCharArray();
+        char[] chas2 = str2.toCharArray();
+        char[] chasAim = aim.toCharArray();
+        if (chasAim.length != chas1.length + chas2.length) {
+            return false;
+        }
+        boolean[][] dp = new boolean[chas1.length + 1][chas2.length + 1];
+        dp[0][0] = true;
+        for (int i = 1; i <= chas1.length; i++) {
+            if (chas1[i - 1] != chasAim[i - 1]) {
+                break;
+            }
+            dp[i][0] = true;
+        }
+        for (int i = 1; i <= chas2.length; i++) {
+            if (chas2[i - 1] != chasAim[i - 1]) {
+                break;
+            }
+            dp[0][i] = true;
+        }
+        for (int i = 1; i <= chas1.length; i++) {
+            for (int j = 1; j <= chas2.length; j++) {
+                if ((chas1[i - 1] == chasAim[i + j - 1] && dp[i - 1][j]) ||
+                        chas2[j - 1] == chasAim[i + j - 1] && dp[i][j - 1]) {
+                    dp[i][j] = true;
+                }
+            }
+        }
+        return dp[chas1.length][chas2.length];
+    }
+
+    /**
+     * 龙与地下城游戏
+     * <p>
+     * 题目：给定一个二维数组map 含义是一张地图 游戏规则如下：
+     * 1.骑士从左上角出发 每次只能向右或者向下走 最后到达最右下角见到公主
+     * 2.地图中的每个位置的值 代表骑士要遭遇的事情
+     * <p>
+     * 2.1如果为负数 说明此处有怪兽 要让骑士损失血量
+     * 2.2如果为非负数 说明此处有血瓶 能让骑士回血
+     * <p>
+     * 3.骑士从左上角到右下角的过程中 走到任何一个位置时 血量都不能少于1
+     * <p>
+     * 思路：
+     * 1.确定dp的含义：dp[i][j]代表如果骑士要走上位置[i,j] 并且从该位置选一条最优的路径 最后走到右下角 骑士最起码应该具备的血量
+     * 2.确定dp的公式：dp[i][j]=Math.max(dp[i][j+1]-map[i][j],dp[i+1][j]-map[i][j],1)
+     * 3.确定dp初始化：
+     * 4.dp的遍历方式：从右下角 往左上角 开始遍历
+     */
+    public static int minHp(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0) {
+            return 1;
+        }
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int[][] dp = new int[row--][col--];
+        dp[row][col] = matrix[row][col] > 0 ? 1 : -matrix[row][col] + 1;
+        for (int i = col - 1; i >= 0; i--) {
+            dp[row][i] = Math.max(dp[row][i + 1] - matrix[row][i], 1);
+        }
+        int right = 0;
+        int down = 0;
+        for (int i = row - 1; i >= 0; i--) {
+            dp[i][col] = Math.max(dp[i + 1][col] - matrix[i][col], 1);
+            for (int j = col - 1; j >= 0; j--) {
+                right = Math.max(dp[i][j + 1] - matrix[i][j], 1);
+                down = Math.max(dp[i + 1][j] - matrix[i][j], 1);
+                dp[i][j] = Math.min(right, down);
+            }
+        }
+        return dp[0][0];
+    }
+
+
+    /**
+     * 房屋抢劫
+     * <p>
+     * 题目：每个房间里都有不同数量的财物，给出能抢劫的最大财物数。这里的唯一限制是不能同时对相邻的房间进行抢劫。
+     * <p>
+     * 思路：
+     * 1.确定dp的含义：dp[i]代表以位置i为结尾时 抢劫的最大财物数
+     * <p>
+     * 2.确定dp的表达式：
+     * case1: i位置不抢   dp[i]=dp[i-1]
+     * case2: i位置抢的话 dp[i]=dp[i-2]+arr[i]
+     * <p>
+     * 3.确定dp初始化：
+     * case1: 只有一个房间：dp[0]=arr[0];
+     * case2: 存在两个房间：dp[1]=Math.max(arr[0],arr[1])
+     */
+    public static int getMaxValue(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return -1;
+        }
+        int[] dp = new int[arr.length];
+        dp[0] = arr[0];
+        dp[1] = Math.max(arr[0], arr[1]);
+        for (int i = 2; i < arr.length; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + arr[i]);
+        }
+        return dp[arr.length - 1];
+    }
+
+
+    /**
+     * 最长递增子串
+     * <p>
+     * 输入：a-z和0-9
+     * 输出：1.不重复 2.有顺序
+     * <p>
+     * 例子：输入：abfdgdfd789abcdefdfkkff
+     * 输出：789abcdef
+     * <p>
+     * <p>
+     * 思路：
+     * 1.dp[i]:以位置i结尾的情况下 最长的递增子串长度为dp[i];
+     * 2.dp[i]=Math.max(dp[i-1]+1,1)//
+     * 3.dp[0]=arr[i];
+     */
+
+    public static String getMaxSubString(String str) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        int[] maxLengthDp = getMaxLengthDp(str);
+        int index = 0;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < maxLengthDp.length; i++) {
+            if (maxLengthDp[i] > max) {
+                max = maxLengthDp[i];
+                index = i;
+            }
+        }
+        return str.substring(index - max + 1, index + 1);
+    }
+
+    public static int[] getMaxLengthDp(String str) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        char[] chas = str.toCharArray();
+        int[] dp = new int[chas.length];
+        dp[0] = 1;
+        for (int i = 1; i < chas.length; i++) {
+            if (chas[i] > chas[i - 1] && dp[i - 1] >= 1 && !isDuplicate(chas, i, dp[i - 1])) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = 1;
+            }
+        }
+        return dp;
+    }
+
+
+    private static boolean isDuplicate(char[] chas, int index, int len) {
+        boolean flag = false;
+        for (int i = index - 1; i >= index - len; i--) {
+            if (chas[index] == chas[i]) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 回文最少分割数
+     * <p>
+     * 题目：给定一个字符串str 返回把str全部切成回文子串的最小分割数
+     * <p>
+     * 思路：
+     * 1.确定dp的含义：dp[i]代表子串str[i...len-1]至少需要切割几次 才能把str[i...len-1]全部切成回文子串
+     * 2.确定dp的公式：dp[i]=Math.min(dp[j+1]+1) (i=<j<len 且str[i...j]必须是回文串)
+     * 3.确定dp的初始化：
+     * <p>
+     * p[i][j]的作用：用于判断str[i...j]是否是回文串
+     * <p>
+     * p[i][j]=true:说明字符串str[i...j]是回文串 否则不是 p[i][j]=true的三种情况：
+     * <p>
+     * 1.str[i...j]由一个字符组成
+     * 2.str[i...j]由两个字符组成且两个字符相等
+     * 3.str[i+1...j-1]是回文串 即p[i+1][j-1]=true且str[i]==str[j] 即str[i...j]上首尾两个字符相等
+     * <p>
+     * [i...j...len-1]
+     */
+    public static int minCut(String str) {
+        if (str == null || str.equals("")) {
+            return 0;
+        }
+        char[] chas = str.toCharArray();
+        int len = chas.length;
+        int[] dp = new int[len + 1];
+        dp[len]=-1;
+        boolean[][] p = new boolean[len][len];
+        for (int i = len - 1; i >= 0; i--) {
+            dp[i] = Integer.MAX_VALUE;
+            for (int j = i; j < len; j++) {
+                if (chas[i] == chas[j] && (j - i < 2 || p[i + 1][j - 1])) {
+                    p[i][j] = true;
+                    dp[i] = Math.min(dp[i], dp[j + 1] + 1);
+                }
+            }
+        }
+        return dp[0];
+    }
+
 
 }

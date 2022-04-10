@@ -706,11 +706,6 @@ public class StringRelatedProblem {
      * 题目：给定字符串str1和str2 求str1的子串中含有str2所有字符的最小子串长度
      */
 
-    /**
-     * 回文最少分割数
-     *
-     * 给定一个字符串str 返回把str全部切成回文子串的最小分割数
-     */
 
     /**
      * 字符串匹配问题
