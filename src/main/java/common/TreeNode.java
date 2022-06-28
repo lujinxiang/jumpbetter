@@ -1,12 +1,12 @@
 package common;
 
 public class TreeNode {
-    public int value;
+    public int val;
     public TreeNode left;
     public TreeNode right;
 
-    public TreeNode(int value) {
-        this.value = value;
+    public TreeNode(int val) {
+        this.val = val;
     }
 
     /**
@@ -41,6 +41,16 @@ public class TreeNode {
         right.left = left2;
         right.right = right2;
         return root;
+    }
+
+
+    public static void preReadTree(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        System.out.print(root.val + " ");
+        preReadTree(root.left);
+        preReadTree(root.right);
     }
 
 }

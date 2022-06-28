@@ -1,6 +1,8 @@
 package algorithm;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 动态规划相关的问题
@@ -8,67 +10,12 @@ import java.util.HashMap;
 public class DynamicRelatedProblem {
 
     public static void main(String[] args) {
-        /*int matrix[][] = new int[][]{
-                {1, 3, 5, 9},
-                {8, 1, 3, 4},
-                {5, 0, 6, 1},
-                {8, 8, 4, 0}
-        };
-        int[] minPathValue = getMinPathValue2(matrix);
-        ArrayUtil.recursiveArray(minPathValue);
-        System.out.println(" ");
-        int[] arr = new int[]{5, 2, 3};
-        int aim = 20;
-        int minMoneyNumber = getMinMoneyNumber(arr, aim);
-        System.out.println(minMoneyNumber);
-        System.out.println();*/
-   /*     int[] arr2 = new int[]{5, 10, 25, 1};
-        int aim = 15;
-        int res = changeMoneyMethod4(arr2, aim);
-        System.out.println(res);*/
-    /*    int length = 8;
-        int maxProductAfterCutting = getMaxProductAfterCutting(length);
-        System.out.println(maxProductAfterCutting);*/
-/*
 
-        String str1 = "1AB2345CD";
-        String str2 = "12345EF";
-        String maxCommonString = getMaxCommonString(str1, str2);
-        System.out.println(maxCommonString);
-*/
-/*        String str1 = "abc";
-        String str2 = "abc";
-        int ic = 5;
-        int dc = 3;
-        int rc = 2;
-        int i = minCost(str1, str2, ic, dc, rc);
-        System.out.println(i);*/
-    /*    int[] arr = new int[]{3, 2, 3, 1, 1, 4};
-        int jump = jump(arr);
-        System.out.println(jump);
-
-        String s1 = "AB";
-        String s2 = "12";
-        String aim = "A1B2";
-        boolean cross = isCross(s1, s2, aim);
-        System.out.println(cross);*/
-/*
-        int[][] map = new int[][]{
-                {-2, -3, 3},
-                {-5, -10, 1},
-                {0, 30, -5}
-        };
-        int i = minHp(map);
-        System.out.println(i);*/
-      /*  int[] arr = new int[]{3, 3, 2, 3};
-        int maxValue = getMaxValue(arr);
-        System.out.println(maxValue);*/
-       /* String str = "abfdgdfd789abcdefdfkkff";
-        String maxSubString = getMaxSubString(str);
-        System.out.println(maxSubString);*/
-
-        int aba = minCut("ABA");
-        System.out.println(aba);
+        int[] arr = new int[]{1, 3, 6, 7, 9, 4, 10, 5, 6};
+        int a = getMaxLengthSequence(arr);
+        System.out.println(a);
+        int i = climbStairs(3);
+        System.out.println(i);
 
     }
 
@@ -87,11 +34,13 @@ public class DynamicRelatedProblem {
     public static int[][] getMaxValue(int n, int[] weight, int[] value, int capacity) {
         int[][] arr = new int[n + 1][capacity + 1];
 
-        for (int i = 0; i <= capacity; i++)
+        for (int i = 0; i <= capacity; i++) {
             arr[0][i] = 0;
+        }
 
-        for (int j = 0; j <= n; j++)
+        for (int j = 0; j <= n; j++) {
             arr[j][0] = 0;
+        }
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= capacity; j++) {
@@ -387,6 +336,66 @@ public class DynamicRelatedProblem {
 
 
     /**
+     * 最长递增子串
+     * <p>
+     * 输入：a-z和0-9
+     * 输出：1.不重复 2.有顺序
+     * <p>
+     * 例子：输入：abfdgdfd789abcdefdfkkff
+     * 输出：789abcdef
+     * <p>
+     * <p>
+     * 思路：
+     * 1.dp[i]:以位置i结尾的情况下 最长的递增子串长度为dp[i];
+     * 2.dp[i]=Math.max(dp[i-1]+1,1)//
+     * 3.dp[0]=arr[i];
+     */
+
+    public static String getMaxSubString(String str) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        int[] maxLengthDp = getMaxLengthDp(str);
+        int index = 0;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < maxLengthDp.length; i++) {
+            if (maxLengthDp[i] > max) {
+                max = maxLengthDp[i];
+                index = i;
+            }
+        }
+        return str.substring(index - max + 1, index + 1);
+    }
+
+    public static int[] getMaxLengthDp(String str) {
+        if (str == null || str.length() == 0) {
+            return null;
+        }
+        char[] chas = str.toCharArray();
+        int[] dp = new int[chas.length];
+        dp[0] = 1;
+        for (int i = 1; i < chas.length; i++) {
+            if (chas[i] > chas[i - 1] && dp[i - 1] >= 1 && !isDuplicate(chas, i, dp[i - 1])) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = 1;
+            }
+        }
+        return dp;
+    }
+
+    private static boolean isDuplicate(char[] chas, int index, int len) {
+        boolean flag = false;
+        for (int i = index - 1; i >= index - len; i--) {
+            if (chas[index] == chas[i]) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    /**
      * 最长递增子序列
      * <p>
      * 题目：给定数组arr 返回arr的最长递增子序列
@@ -396,28 +405,28 @@ public class DynamicRelatedProblem {
      * 思路：
      * 1.确定dp的含义：dp[i]代表在以arr[i]这个数结尾的情况下 arr[0...i]中的最大递增子序列长度
      * 2.确定dp的公式：dp[i]=Math.max(dp[j]+1) 其中0<=j<i,arr[j]<arr[i]
-     * 3.初始化dp:
+     * 3.初始化dp:dp[0]=1;
+     * <p>
+     * 完成情况：done
      */
-    public static int[] getMaxLengthSequence(int[] arr) {
+    public static int getMaxLengthSequence(int[] arr) {
         if (arr == null || arr.length == 0) {
-            return null;
+            return 0;
         }
         int[] dp = new int[arr.length];
+        int max = 1;
         for (int i = 0; i < arr.length; i++) {
             dp[i] = 1;
             for (int j = 0; j < i; j++) {
                 if (arr[i] > arr[j]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
+                    max = Math.max(max, dp[i]);
                 }
             }
         }
-        return generateLIS(arr, dp);
+        return max;
     }
 
-    private static int[] generateLIS(int[] arr, int[] dp) {
-
-        return null;
-    }
 
     /**
      * 最长公共子序列问题
@@ -491,7 +500,8 @@ public class DynamicRelatedProblem {
         char[] chas1 = str1.toCharArray();
         char[] chas2 = str2.toCharArray();
         int[][] dp = getDp(chas1, chas2);
-        int end = 0;//end用于记录长度为max的字符下标
+        //end用于记录长度为max的字符下标
+        int end = 0;
         int max = 0;
         for (int i = 0; i < chas1.length; i++) {
             for (int j = 0; j < chas2.length; j++) {
@@ -827,68 +837,6 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 最长递增子串
-     * <p>
-     * 输入：a-z和0-9
-     * 输出：1.不重复 2.有顺序
-     * <p>
-     * 例子：输入：abfdgdfd789abcdefdfkkff
-     * 输出：789abcdef
-     * <p>
-     * <p>
-     * 思路：
-     * 1.dp[i]:以位置i结尾的情况下 最长的递增子串长度为dp[i];
-     * 2.dp[i]=Math.max(dp[i-1]+1,1)//
-     * 3.dp[0]=arr[i];
-     */
-
-    public static String getMaxSubString(String str) {
-        if (str == null || str.length() == 0) {
-            return null;
-        }
-        int[] maxLengthDp = getMaxLengthDp(str);
-        int index = 0;
-        int max = Integer.MIN_VALUE;
-        for (int i = 0; i < maxLengthDp.length; i++) {
-            if (maxLengthDp[i] > max) {
-                max = maxLengthDp[i];
-                index = i;
-            }
-        }
-        return str.substring(index - max + 1, index + 1);
-    }
-
-    public static int[] getMaxLengthDp(String str) {
-        if (str == null || str.length() == 0) {
-            return null;
-        }
-        char[] chas = str.toCharArray();
-        int[] dp = new int[chas.length];
-        dp[0] = 1;
-        for (int i = 1; i < chas.length; i++) {
-            if (chas[i] > chas[i - 1] && dp[i - 1] >= 1 && !isDuplicate(chas, i, dp[i - 1])) {
-                dp[i] = dp[i - 1] + 1;
-            } else {
-                dp[i] = 1;
-            }
-        }
-        return dp;
-    }
-
-
-    private static boolean isDuplicate(char[] chas, int index, int len) {
-        boolean flag = false;
-        for (int i = index - 1; i >= index - len; i--) {
-            if (chas[index] == chas[i]) {
-                flag = true;
-                break;
-            }
-        }
-        return flag;
-    }
-
-
-    /**
      * 回文最少分割数
      * <p>
      * 题目：给定一个字符串str 返回把str全部切成回文子串的最小分割数
@@ -915,7 +863,7 @@ public class DynamicRelatedProblem {
         char[] chas = str.toCharArray();
         int len = chas.length;
         int[] dp = new int[len + 1];
-        dp[len]=-1;
+        dp[len] = -1;
         boolean[][] p = new boolean[len][len];
         for (int i = len - 1; i >= 0; i--) {
             dp[i] = Integer.MAX_VALUE;
@@ -928,6 +876,394 @@ public class DynamicRelatedProblem {
         }
         return dp[0];
     }
+
+
+    /**
+     * 题目：
+     * <p>
+     * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+     * <p>
+     * 示列：
+     * 输入: s = "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * <p>
+     * <p>
+     * 方式1：动态规划
+     * <p>
+     * step1:定义dp数组的含义
+     * dp[i]: 以str[i]结尾的具有最大非重复字符的子串的长度
+     * <p>
+     * step2：推理出dp的递推公式
+     * dp[i+1]= dp[i]+1;  str[i+1]不在dp[i-1]长度范围内；
+     * dp[i+1]=i-last;    last代表str[i+1]在dp[i-1]范围内重复字符的位置；
+     * <p>
+     * step3:dp数组初始化
+     * dp[0]=1;
+     * <p>
+     * 完成情况：done
+     *
+     * @param str
+     * @return
+     */
+    public static int lengthOfLongestSubstring2(String str) {
+        if (str == null || str.length() == 0) {
+            return 0;
+        }
+        char[] chars = str.toCharArray();
+        int[] dp = new int[str.length()];
+        dp[0] = 1;
+        int max = 1;
+        for (int i = 1; i < chars.length; i++) {
+            //寻找的起始位置应该是：dp[i-1]的长度范围内；因为这样才是dp[i-1]位置不重复的值；
+            int last = getLastIndex(chars[i], chars, i - dp[i - 1], i - 1);
+            if (last == -1) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = i - last;
+            }
+            if (dp[i] > max) {
+                max = dp[i];
+            }
+        }
+        return max;
+    }
+
+    private static int getLastIndex(char cha, char[] chars, int start, int end) {
+        int index = -1;
+        for (int i = end; i >= start; i--) {
+            if (chars[i] == cha) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+
+    /**
+     * 方式2：双指针+set集合
+     *
+     * @param str
+     * @return
+     */
+    public static int lengthOfLongestSubstring(String str) {
+        if (str == null || str.length() == 0) {
+            return 0;
+        }
+        char[] chars = str.toCharArray();
+        Set<Character> set = new HashSet<>();
+        int start = 0;
+        int end = 0;
+        int max = 1;
+        for (int i = 0; i < chars.length; i++) {
+            if (start == end) {
+                i = start;
+            }
+            if (!set.contains(chars[i])) {
+                set.add(chars[i]);
+                end++;
+                max = Math.max(max, set.size());
+                continue;
+            }
+            set.clear();
+            start++;
+            end = start;
+            max = Math.max(1, max);
+        }
+        return max;
+    }
+
+
+    /**
+     * 题目：最长回文子串
+     * <p>
+     * 给你一个字符串 s，找到 s 中最长的回文子串。
+     * <p>
+     * 输入：s = "babad"
+     * 输出："bab"
+     * 解释："aba" 同样是符合题意的答案。
+     * <p>
+     * <p>
+     * dp[i][j]:表示区间范围[i...j]的子串是否是回文子串；
+     * <p>
+     * dp[i][j]=dp[i+1][j-1] (s[i]==s[j]&&j-i>1) 依赖左下角的值 （因此遍历顺序需要从下往上遍历，从左往右遍历）；
+     * <p>
+     * dp[i][j]=true         (s[i]==s[j]&&j-i<=1)
+     * <p>
+     * 遍历顺序很重要！！！！
+     * 这边由于从左到右、从上到下遍历出错了；
+     * <p>
+     * 完成情况：done
+     */
+    public static String longestPalindrome(String s) {
+        boolean dp[][] = new boolean[s.length()][s.length()];
+        int max = Integer.MIN_VALUE;
+        char[] chars = s.toCharArray();
+        dp[0][0] = Boolean.TRUE;
+        int start = 0;
+        int end = 0;
+        //dp初始化:对角线的元素也就是元素本身,永远为TRUE;
+        for (int i = 0; i < chars.length; i++) {
+            for (int j = 0; j < chars.length; j++) {
+                if (i == j) {
+                    dp[i][j] = Boolean.TRUE;
+                }
+            }
+        }
+        //dp数组的遍历
+        //注意遍历顺序；dp[i][j]=dp[i+1][j-1] 依赖左下角的值，因此需要从下往上遍历；
+        for (int i = chars.length - 1; i >= 0; i--) {
+            //j=i,表示只看二维数组的上半部分；
+            for (int j = i; j < chars.length; j++) {
+                if (chars[i] == chars[j]) {
+                    if (j - i <= 1) {
+                        dp[i][j] = true;
+                    } else if (dp[i + 1][j - 1]) {
+                        dp[i][j] = true;
+                    }
+                }
+            }
+        }
+
+        /**
+         * 寻找子串的起始位置；
+         */
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j < s.length(); j++) {
+                if (dp[i][j] && j - i + 1 > max) {
+                    start = i;
+                    end = j;
+                    max = Math.max(max, j - i + 1);
+                }
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+
+    /**
+     * 题目：最长回文子序列
+     * <p>
+     * 给定⼀个字符串 s ，找到其中最⻓的回⽂⼦序列，并返回该序列的⻓度。可以假设 s 的最⼤⻓度为 1000;
+     * <p>
+     * 子序列定义为：不改变剩余字符顺序的情况下，删除某些字符或者不删除任何字符形成的一个序列。
+     * <p>
+     * 示例 1:
+     * 输⼊: "bbbab"
+     * 输出: 4
+     * ⼀个可能的最⻓回⽂⼦序列为 "bbbb"。
+     * <p>
+     * 思路：
+     * step1:
+     * dp[i][j]:字符串s在[i...j]范围内最长的回文子序列的长度为dp[i][j];
+     * <p>
+     * step2:
+     * dp[i][j]=dp[i+1][j-1]+2                   s[i]==s[j] （两个字符都要）
+     * dp[i][j]=Math.max(dp[i][j-1],dp[i+1][j])  s[i]!=s[j] （两个字符选择其中一个）
+     * <p>
+     * step3:
+     * dp[i][i]=1;
+     * 遍历顺序：从下到上；
+     * <p>
+     * 完成情况：done
+     */
+    public static int longestPalindromeSubseq(String s) {
+        char[] chars = s.toCharArray();
+        int[][] dp = new int[s.length()][s.length()];
+        //dp初始化
+        for (int i = 0; i < chars.length; i++) {
+            dp[i][i] = 1;
+        }
+        //遍历dp
+        for (int i = chars.length - 1; i >= 0; i--) {
+            //这边j=i+1需要注意下；
+            for (int j = i + 1; j < chars.length; j++) {
+                if (chars[i] == chars[j]) {
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i + 1][j]);
+                }
+            }
+        }
+        return dp[0][s.length() - 1];
+    }
+
+
+    /**
+     * 最大子数组和
+     * <p>
+     * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+     * 子数组 是数组中的一个连续部分。
+     * <p>
+     * dp[i]:表示到i位置为止的最大子数组和；
+     * <p>
+     * dp[i]=dp[i-1]+nums[i];
+     * dp[i]=nums[i];
+     * <p>
+     * dp[0]=nums[0];
+     * 遍历顺序从左往右；
+     * <p>
+     * 完成情况：done
+     */
+    public static int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int max = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            if (dp[i] > max) {
+                max = dp[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 题目：给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+     * <p>
+     * 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+     * <p>
+     * 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+     * <p>
+     * dp[i][0]:表示第i天持有股票的最大收益；  其中0、1代表是否持有；
+     * dp[i][1]:表示第i天不持有股票的最大收益；
+     * <p>
+     * dp[i][0]=Math.max(dp[i-1][0],-price[i]);            第i天持有股票
+     * dp[i][1]=Math.max(dp[i-1][1],price[i]+dp[i-1][0]);  第i天卖出股票
+     * <p>
+     * 完成情况：done
+     */
+    public static int maxProfit(int[] prices) {
+        if (prices == null || prices.length == 0) {
+            return 0;
+        }
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] = -prices[0];
+        dp[0][1] = 0;
+        for (int i = 1; i < prices.length; i++) {
+            //第i天持有股票的最大收益
+            dp[i][0] = Math.max(dp[i - 1][0], -prices[i]);
+            //第i天不持有股票的最大收益
+            dp[i][1] = Math.max(dp[i - 1][1], prices[i] + dp[i - 1][0]);
+        }
+        return dp[prices.length - 1][1];
+    }
+
+
+    /**
+     * 题目：不同路径
+     * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+     * <p>
+     * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+     * <p>
+     * 问总共有多少条不同的路径？
+     * <p>
+     * dp[i][j]：代表从(0,0)位置到(i,j)位置的路径数；
+     * dp[i][j]=dp[i-1][j]+dp[i][j-1](从左和从上到(i,j)位置的路径数)
+     * dp[i][0]=1;列方向上只可以向下走，路径数为1；
+     * dp[0][j]=1;行方向上只可以向右走，路径数为1；
+     * <p>
+     * 完成情况：done
+     */
+    public static int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+    /**
+     * 题目：爬楼梯问题
+     * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+     * <p>
+     * 每次你可以爬 1 或 2 个台阶。你有多少种不同的⽅法可以爬到楼顶呢？
+     * <p>
+     * 注意：给定 n 是⼀个正整数。
+     * <p>
+     * dp[i]：表示爬到第i阶的的方法数；
+     * dp[i]=dp[i-1]+dp[i-2];
+     * 方法1：先爬到第i-1台阶，再爬一步到顶；方法数为dp[i-1]
+     * 方法2：先爬到第i-2台阶，再爬两步到顶；方法数为dp[i-2]
+     * dp[0]=0;
+     * dp[1]=1;
+     * dp[2]=2;
+     * <p>
+     * 完成情况：done
+     */
+    public static int climbStairs(int n) {
+        if (n <= 2) {
+            return n;
+        }
+        //需要注意一下数组的定义长度；
+        int dp[] = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    /**
+     * 题目：使用最小花费爬楼梯
+     * 数组的每个下标作为⼀个阶梯，第 i 个阶梯对应着⼀个⾮负数的体⼒花费值 cost[i]（下标从 0 开始）。
+     * 每当你爬上⼀个阶梯你都要花费对应的体⼒值，⼀旦⽀付了相应的体⼒值，你就可以选择向上爬⼀个阶
+     * 梯或者爬两个阶梯。
+     * 请你找出达到楼层顶部的最低花费。在开始时，你可以选择从下标为 0 或 1 的元素作为初始阶梯。
+     * <p>
+     * 示例 1：
+     * 输⼊：cost = [10, 15, 20]
+     * 输出：15
+     * 解释：最低花费是从 cost[1] 开始，然后⾛两步即可到阶梯顶，⼀共花费 15 。
+     * <p>
+     * dp[i]:表示爬到第i个台阶的最小花费；
+     * dp[i]=Math.min(dp[i-1],dp[i-2])+cost[i] // 加cost[i]是因为每到一个台阶，都需要花费这个台阶所对应的体力值；
+     * <p>
+     * 完成情况：done
+     */
+    public static int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length];
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for (int i = 2; i < cost.length; i++) {
+            dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i];
+
+        }
+        //每当你爬上⼀个阶梯你都要花费对应的体⼒值，⼀旦⽀付了相应的体⼒值，你就可以选择向上爬⼀个阶梯或者爬两个阶梯
+        //所以选择最后两个dp数组中的最小值；
+        return Math.min(dp[cost.length - 1], dp[cost.length - 2]);
+    }
+
+
+    /**
+     * 题目：添加最少字符使字符串整体都是回文字符串
+     * 给定一个字符串str,如果可以在str的任意位置添加字符，请返回在添加字符最少的情况下，让str整体都是回文字符的一种结果；
+     *
+     * case1:str="ABA" str本身就是回文串，不需要添加字符，所以返回"ABA";
+     * case2:str="BA",添加B或者A,返回ABA或者BAB
+     *
+     * dp[i][j]:代表子串str[i...j]最少添加几个字符可以使str[i...j]整体都是回文串；
+     *
+     * dp[i][j]= dp[i+1][j-1]; str[i]=str[j]
+     * dp[i][j]=Math.min(dp[i][j-1],dp[i+1][j])+1; str[i]!=str[j];
+     *
+     *
+     */
 
 
 }

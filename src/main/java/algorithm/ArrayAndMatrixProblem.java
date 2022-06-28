@@ -874,5 +874,20 @@ public class ArrayAndMatrixProblem {
         return smallSum;
     }
 
+    /**
+     * 求最短通路值
+     * <p>
+     * 题目：用一个整型矩阵matrix代表一个网络，1代表有路，0代表没有路，每一个位置只要不越界，都有上下左右四个方向，
+     * 求从最左上角到最右下角的最短通路值；
+     * <p>
+     * <p>
+     * 解法：宽度优先遍历，使用队列来实现；
+     */
+    public static int getMinPathValue(int[][] m) {
+
+        return 0;
+
+    }
+
 
 }

@@ -21,68 +21,6 @@ public class DFSRelatedProblem {
         System.out.println(childCollection);
     }
 
-    /**
-     * 1.N皇后问题
-     * <p>
-     * 题目：N皇后问题是指在N*N的棋盘上要摆N个皇后 要求任何两个皇后不同行、不同列 也不在一条斜线上
-     * 给定一个整数n 返回n皇后的摆法有多少种？
-     * <p>
-     * 思路：n皇后问题的核心解法
-     * 1.状态判断：判断当前位置 是否满足n皇后的定义
-     * 2.状态探索：递归地向下探索下一个位置
-     * 3.状态回溯：比如进行到某一位置时 发现没有办法进行往下探索 就需要回溯到上一个状态
-     */
-    public static List<List<String>> solveNQueens(int n) {
-        char[][] chs = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                chs[i][j] = '.';
-            }
-        }
-        List<List<String>> res = new ArrayList<>();
-        backTracing(chs, 0, n, res);
-        return res;
-    }
-
-    private static void backTracing(char[][] chs, int row, int n, List<List<String>> res) {
-        //每行都摆满皇后时，则产生了一种解法
-        if (row == n) {
-            res.add(chsToList(chs));
-            return;
-        }
-        //一行一行地摆放，在确定一行中的那个皇后应该摆在哪一列时，需要当前列是否合法。
-        //如果合法，则将皇后放置在当前位置，并进行递归，回溯。
-        for (int col = 0; col < chs[0].length; col++) {
-            if (isValid(chs, row, col)) {
-                chs[row][col] = 'Q';
-                //递归
-                backTracing(chs, row + 1, n, res);
-                //回溯
-                chs[row][col] = '.';
-            }
-        }
-    }
-
-    private static List<String> chsToList(char[][] chs) {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < chs.length; i++) {
-            list.add(new String(chs[i]));
-        }
-        return list;
-    }
-
-    //判断合法：当前将要摆放'Q'的位置和其他已摆放‘Q’的位置不能在同一列，且不能在同一条45度斜线或135度斜线上。
-    //这里判断是否在同一条斜线上可通过当前将要摆放'Q'的位置和其他已摆放‘Q’的位置横坐标之差和纵坐标之差的绝对值是否相等来判断。
-    private static boolean isValid(char[][] chs, int x, int y) {
-        for (int i = 0; i <= x; i++) {
-            for (int j = 0; j < chs[0].length; j++) {
-                if (chs[i][j] == 'Q' && (j == y || Math.abs(x - i) == Math.abs(y - j))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
 
     /**
@@ -149,7 +87,6 @@ public class DFSRelatedProblem {
      */
 
 
-
     /**
      * 4.子集问题
      * <p>
@@ -177,15 +114,7 @@ public class DFSRelatedProblem {
     }
 
 
-    /**
-     * 5.查找最大的连通面积
-     *
-     *
-     */
 
-    /**
-     * 6.好友关系的连通分量数目
-     */
 
 
 

@@ -2,10 +2,9 @@ package algorithm;
 
 import common.ArrayUtil;
 import common.TreeNode;
+import leetcode.problem.ListNode;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 个人测试算法题目相关 目的有二
@@ -17,15 +16,9 @@ import java.util.Queue;
 public class PersonalTest {
 
     public static void main(String[] args) {
-        TreeNode root = TreeNode.getTree();
-        levelReadTreeWithLineNumber(root);
 
-        int[] arr = {1, -1, 2, -4};
-        quickSort(arr);
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
-        System.out.println(" ");
+
+        Solution22 solution = new Solution22();
 
     }
 
@@ -71,7 +64,7 @@ public class PersonalTest {
         queue.offer(root);
         while (!queue.isEmpty()) {
             TreeNode temp = queue.poll();
-            System.out.print(temp.value + " ");
+            System.out.print(temp.val + " ");
             if (temp.left != null) {
                 queue.offer(temp.left);
             }
@@ -95,7 +88,7 @@ public class PersonalTest {
         queue.offer(root);
         while (!queue.isEmpty()) {
             TreeNode temp = queue.poll();
-            System.out.print(temp.value + " ");
+            System.out.print(temp.val + " ");
             if (temp.left != null) {
                 queue.offer(temp.left);
                 nLast = temp.left;
@@ -212,7 +205,7 @@ public class PersonalTest {
                 largest = right;
             }
             startIndex = largest;
-            left=(startIndex+1)/2;
+            left = (startIndex + 1) / 2;
 
         }
     }
@@ -227,5 +220,40 @@ public class PersonalTest {
         }
     }
 
+}
 
+class Solution22 {
+
+    /**
+     * 1. 明确递归函数的意义和作用，我觉得这一点很重要；
+     * <p>
+     * 2. 明确递归函数的参数和返回值
+     * <p>
+     * 3. 明确递归函数的终止条件
+     * <p>
+     * 4. 明确递归函数的操作；(//这一段逻辑是要干什么？？？？)
+     *
+     * @param head1
+     * @param head2
+     * @return
+     */
+
+    public ListNode mergeTwoLists(ListNode head1, ListNode head2) {
+
+        //1. 作用：对两个链表进行排序的，返回排序后的头节点； done
+        //2. 参数：两个链表的头节点，够吗？？？返回值：排序后的头节点 done
+        //3. 终止条件：head1==null && head2==null 返回头节点； done
+        //4. 递归的操作：
+        if (head1 == null) {
+            return head2;
+        } else if (head2 == null) {
+            return head1;
+        } else if (head1.val < head2.val) {
+            head1.next = mergeTwoLists(head1.next, head2);
+            return head1;
+        } else {
+            head2.next = mergeTwoLists(head1, head2.next);
+            return head2;
+        }
+    }
 }

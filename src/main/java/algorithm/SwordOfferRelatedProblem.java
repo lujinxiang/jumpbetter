@@ -198,7 +198,7 @@ public class SwordOfferRelatedProblem {
         if (source == null || target == null) {
             return false;
         }
-        if (source.value != target.value) {
+        if (source.val != target.val) {
             return false;
         }
         return doesTre1HaveTree2(source.left, target.left) && doesTre1HaveTree2(source.right, target.right);
@@ -223,7 +223,7 @@ public class SwordOfferRelatedProblem {
         if (leftNode == null || rightNode == null) {
             return false;
         }
-        return leftNode.value == rightNode.value && isMirror(leftNode.left, rightNode.right) && isMirror(leftNode.right, rightNode.left);
+        return leftNode.val == rightNode.val && isMirror(leftNode.left, rightNode.right) && isMirror(leftNode.right, rightNode.left);
     }
 
     public boolean isSymmetric2(TreeNode root) {
@@ -239,7 +239,7 @@ public class SwordOfferRelatedProblem {
             if (t1 == null || t2 == null) {
                 return false;
             }
-            if (t1.value != t2.value) {
+            if (t1.val != t2.val) {
                 return false;
             }
             stack.push(t1.left);
@@ -266,7 +266,7 @@ public class SwordOfferRelatedProblem {
         queue.offer(root);
         while (!queue.isEmpty()) {
             TreeNode node = queue.poll();
-            list.add(node.value);
+            list.add(node.val);
             if (node.left != null) {
                 queue.offer(node.left);
             }
@@ -291,8 +291,8 @@ public class SwordOfferRelatedProblem {
         if (root == null) {
             return listAll;
         }
-        list.add(root.value);
-        target -= root.value;
+        list.add(root.val);
+        target -= root.val;
         if (target == 0 && root.left == null && root.right == null) {
             listAll.add(new ArrayList<>(list));
         }
@@ -375,7 +375,7 @@ public class SwordOfferRelatedProblem {
         if (root == null) {
             return "#";
         }
-        return root.value + " " + serialize(root.left) + " " + serialize(root.right);
+        return root.val + " " + serialize(root.left) + " " + serialize(root.right);
     }
 
     /**

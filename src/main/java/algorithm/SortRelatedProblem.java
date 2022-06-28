@@ -12,10 +12,10 @@ import common.ArrayUtil;
 public class SortRelatedProblem {
 
     public static void main(String[] args) {
-        int[] arrayInstance = ArrayUtil.getArrayInstance();
-        ArrayUtil.recursiveArray(arrayInstance);
-        insertSort(arrayInstance);
-        ArrayUtil.recursiveArray(arrayInstance);
+
+        int[] arr = new int[]{2, 1, 3,-1};
+        int[] res = heapSort(arr);
+        System.out.println(res);
     }
 
     /**
@@ -126,7 +126,9 @@ public class SortRelatedProblem {
             heapInsert(arr, i);
         }
         for (int i = arr.length - 1; i > 0; i--) {
+            //从尾部进行交换和堆的调整，尾部位置和头节点进行交换；
             ArrayUtil.swap(arr, 0, i);
+            //0-i 位置进行堆的调整，所以i可以定义为size;
             heapify(arr, 0, i);
         }
         return arr;
@@ -146,8 +148,11 @@ public class SortRelatedProblem {
     }
 
     private static void heapify(int[] arr, int i, int size) {
+        //相当于树的左子树；
         int left = i * 2 + 1;
+        //相当于数的右子树；
         int right = i * 2 + 2;
+        //指向最大值的节点，当前指向0位置；
         int largest = i;
         while (left < size) {
             if (arr[left] > arr[i]) {
@@ -216,8 +221,9 @@ public class SortRelatedProblem {
      */
 
 
-
     /**
      * 8.希尔排序
      */
+
+
 }
