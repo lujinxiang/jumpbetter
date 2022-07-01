@@ -2,7 +2,6 @@ package algorithm;
 
 import common.TreeNode;
 import org.apache.logging.log4j.util.Strings;
-import sun.awt.image.ImageWatched;
 
 import java.util.*;
 
@@ -12,16 +11,14 @@ import java.util.*;
 public class TreeRelatedProblem {
 
     public static void main(String[] args) {
-        Solution112 solution112 = new Solution112();
-        TreeNode root = new TreeNode(1);
-        root.right = new TreeNode(3);
-        List<Integer> path = new LinkedList<>();
-        List<List<Integer>> res = new ArrayList<>();
-        solution112.dfs2(root, (LinkedList<Integer>) path, res);
-        System.out.print(res);
-        System.out.println("");
-        int i = solution112.sumNumbers(root);
-        System.out.print(i);
+
+        TreeNode head = new TreeNode(1);
+        head.left = new TreeNode(3);
+        head.right = new TreeNode(-1);
+        TreeNode[] twoErrNodes = getTwoErrNodes(head);
+        for (int i = 0; i < twoErrNodes.length; i++) {
+            System.out.print(twoErrNodes[i] + " ");
+        }
     }
 
     /**
@@ -302,6 +299,71 @@ public class TreeRelatedProblem {
         return left != null ? left : right;
     }
 
+
+    /**
+     * 方式2：寻找两个节点的最近公共祖先节点
+     * <p>
+     * 思路：遍历二叉树，建立一个map维护 (key,value)
+     * 1. key: 代表当前遍历到的节点
+     * 2. value: 代表当前节点的父节点
+     * <p>
+     * 如何寻找最近公共祖先节点？
+     * step1:将A节点的所有祖先节点放入 C集合中；
+     * step2:遍历map查询B节点的父节点是否在C集合中；
+     * step3:找到C集合中的公共值 返回即可；
+     *
+     * @param head
+     * @param o1
+     * @param o2
+     * @return
+     */
+    public static TreeNode lowestAncestor2(TreeNode head, TreeNode o1, TreeNode o2) {
+        Record record = new Record(head);
+        return record.queryCommonTreeNode(o1, o2);
+    }
+
+    /**
+     * Record静态内部类：存储父节点和子节点映射关系的map;
+     */
+    static class Record {
+        private HashMap<TreeNode, TreeNode> map;
+
+        public Record(TreeNode root) {
+            map = new HashMap<>();
+            if (root == null) {
+                map.put(root, null);
+            }
+            setMap(root);
+        }
+
+        private void setMap(TreeNode root) {
+            if (root == null) {
+                return;
+            }
+            if (root.left != null) {
+                map.put(root.left, root);
+            }
+            if (root.right != null) {
+                map.put(root.right, root);
+            }
+            setMap(root.left);
+            setMap(root.right);
+        }
+
+        public TreeNode queryCommonTreeNode(TreeNode o1, TreeNode o2) {
+            HashSet<TreeNode> path = new HashSet<>();
+            while (map.containsKey(o1)) {
+                path.add(o1);
+                o1 = map.get(o1);
+            }
+            while (!path.contains(o2)) {
+                o2 = map.get(o2);
+            }
+            return o2;
+        }
+    }
+
+
     /**
      * 二叉树节点间的最大距离问题
      * <p>
@@ -312,7 +374,7 @@ public class TreeRelatedProblem {
      * 最大距离可能的三种情况
      * 1.h的左子树上的最大距离
      * 2.h的右子树上的最大距离
-     * 3.h左子树上离h.left最远的距离+l(h)+h右子树上离h.right最远的距离
+     * 3.h左子树上离h.left最远的距离+1(h)+h右子树上离h.right最远的距离
      * 三个值中最大的那个就是整颗h树中最远的距离
      */
     public static int maxDistance(TreeNode head) {
@@ -325,9 +387,13 @@ public class TreeRelatedProblem {
             record[0] = 0;
             return 0;
         }
+        //左子树的最大距离
         int lMax = posOrder(head.left, record);
+        //左子树上距离head左孩子的最远距离
         int maxFromLeft = record[0];
+        //右子树上的最大距离
         int rMax = posOrder(head.right, record);
+        //右子树上距离head右孩子的最远距离
         int maxFromRight = record[0];
         int curNodeMax = maxFromLeft + maxFromRight + 1;
         record[0] = Math.max(maxFromLeft, maxFromRight) + 1;
@@ -442,6 +508,7 @@ public class TreeRelatedProblem {
         }
         int[] num = new int[n + 1];
         num[0] = 1;
+        //使用了动态规划来实现的；
         for (int i = 1; i < n + 1; i++) {
             for (int j = 1; j < i + 1; j++) {
                 num[i] += num[j - 1] * num[i - j];
@@ -449,6 +516,7 @@ public class TreeRelatedProblem {
         }
         return num[n];
     }
+
 
 }
 
@@ -986,4 +1054,96 @@ class Solution112 {
     }
 }
 
+/**
+ * 题目：通过有序数组生成平衡搜索二叉树
+ * <p>
+ * 给定一个有序数组sortArr,已知其中没有重复值，用这个有序数组生成一棵平衡搜索二叉树，
+ * 并且该搜索二叉树中中序遍历的结果和sortArr一致；
+ */
+class Solution113 {
+
+
+    /**
+     * 思路：
+     * 1.用有序数组中最中间的数生成搜索二叉树的头节点
+     * 2.用这个数左边的数生成左子树
+     * 3.用这个数右边的数生成右子树
+     *
+     * @param sortArr
+     * @return
+     */
+    public TreeNode generateTree(int[] sortArr) {
+        if (sortArr == null) {
+            return null;
+        }
+        return generate(sortArr, 0, sortArr.length - 1);
+    }
+
+    private TreeNode generate(int[] sortArr, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = (start + end) / 2;
+        TreeNode root = new TreeNode(sortArr[mid]);
+        //递归生成左右子树；
+        root.left = generate(sortArr, start, mid - 1);
+        root.right = generate(sortArr, mid + 1, end);
+        return root;
+    }
+}
+
+
+/**
+ * 题目：二叉树的序列化和反序列化
+ */
+class Solution114 {
+    /**
+     * 方式1：二叉树的先序遍历实现二叉树的序列化和反序列化
+     * <p>
+     * 备注：
+     * 1.遇到null节点用"#！"
+     * 2."！"表示一个值的结束；
+     */
+    public String serialByPre(TreeNode root) {
+        //终止条件的返回值需要被递归函数使用，需要注意返回的不是null字符串；
+        if (root == null) {
+            return "#!";
+        }
+        String res = root.val + "!";
+        res += serialByPre(root.left);
+        res += serialByPre(root.right);
+        return res;
+    }
+
+    //反序列化树
+    public TreeNode deSerialByPre(String preStr) {
+        //按照!符合进行数据拆分，将拆分好的数据放进辅助队列中；
+        String[] values = preStr.split("!");
+        Queue<String> queue = new LinkedList<>();
+        for (int i = 0; i != values.length; i++) {
+            queue.offer(values[i]);
+        }
+        return deSerialTree(queue);
+    }
+
+    private TreeNode deSerialTree(Queue<String> queue) {
+        String value = queue.poll();
+        if (value.equals("#")) {
+            return null;
+        }
+        TreeNode root = new TreeNode(Integer.valueOf(value));
+        root.left = deSerialTree(queue);
+        root.right = deSerialTree(queue);
+        return root;
+    }
+
+}
+
+
+/**
+ * 题目：先序、中序和后序数组两两组合重构二叉树
+ */
+class Solution115 {
+
+}
 

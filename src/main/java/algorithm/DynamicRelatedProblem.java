@@ -546,7 +546,16 @@ public class DynamicRelatedProblem {
      * 思路：
      * 1.确定dp的含义：dp[i][j]代表str1[0...i-1]编辑成str2[0...j-1]的最小代价
      * 2.确定dp的公式：
-     * 3.对dp初始化:
+     * * * * 2.1 dp[i][j]= dp[i-1][j]+dc;
+     * * * * 2.2 dp[i][j]= dp[i][j-1]+ic;
+     * * * * 2.3 dp[i][j]= dp[i-1][j-1]+rc; str1[i-1]!=str2[j-1]
+     * * * * 2.4 dp[i][j]= dp[i-1][j-1]; str1[i-1]=str2[j-1]
+     * 3.对dp初始化：
+     * * * * 3.1 dp[i][0]:表示str1[0...i-1]编辑成空串的最小代价
+     * * * * * * dp[i][0]=dc*i;
+     * * * * 3.2 dp[0][j]:表示把空串编辑成str2[0...j-1]的最小代价
+     * * * * * * dp[0][j]=ic*j;
+     *
      * <p>
      * 操作类型：
      * 1.dc:删除操作；delete controller
@@ -726,6 +735,13 @@ public class DynamicRelatedProblem {
      * 思路：
      * 1.确定dp的含义：dp[i][j]的值代表aim[0...i+j-1]能否被str1[0...i-1]和str2[0...j-1]交错组成
      * 2.确定dp的公式：
+     * * * * 2.1: dp[0][0]=true.aim为空串时，可以被str1为空串和str2为空串交错组成；
+     * * * * 2.2: dp[i][0]=true  aim[0...i-1]=str1[0...i-1]
+     * * * * * *  dp[i][0]=false aim[0...i-1]!=str1[0...i-1]
+     * * * * 2.3: dp[0][j]=true  aim[0...j-1]=str2[0...j-1]
+     * * * * * *  dp[0][j]=false aim[0...j-1]!=str2[0...j-1]
+     * * * * 2.4: dp[i][j]=true  str1[i-1]=aim[i+j+1]||str2[j-1]==aim[i+j-1]
+     * <p>
      * 3.确定dp初始化：
      */
     public static boolean isCross(String str1, String str2, String aim) {

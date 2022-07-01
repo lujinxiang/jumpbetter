@@ -13,7 +13,9 @@
 /Users/jinxianglu/projects/ljx-better/src/main/java/springstudy/HelloController.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/BinarySearchProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/TreeRelatedProblem.java
+/Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/BfsRelatedProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/SortRelatedProblem.java
+/Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/DivideAndConquerProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/BitCalculateProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/OtherRelatedProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/common/TreeNode.java
@@ -26,7 +28,6 @@
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/RollBackRelatedProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/proxy/AllNumber.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/LeetCodeRelatedProblem.java
-/Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/BFSRelatedProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/PersonalTest.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/algorithm/GreedyRelatedProblem.java
 /Users/jinxianglu/projects/ljx-better/src/main/java/proxy/StudentInvocationHandler.java

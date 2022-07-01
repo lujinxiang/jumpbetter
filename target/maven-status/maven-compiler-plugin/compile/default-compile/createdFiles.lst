@@ -16,12 +16,15 @@ springstudy/HelloController.class
 proxy/Person.class
 algorithm/BinarySearchProblem.class
 algorithm/Solution36.class
+algorithm/BfsRelatedProblem.class
 algorithm/OtherRelatedProblem$Resource.class
 algorithm/Solution5.class
+algorithm/Solution61.class
 algorithm/RollBackRelatedProblem.class
 proxy/StudentInvocationHandler.class
 algorithm/OtherRelatedProblem$LRU$Node.class
 algorithm/Solution18.class
+algorithm/Solution63.class
 algorithm/StackAndQueueProblem.class
 algorithm/Solution111.class
 algorithm/Solution35.class
@@ -30,7 +33,6 @@ algorithm/OtherRelatedProblem$PrintThread$1.class
 algorithm/SwordOfferRelatedProblem$MyStack.class
 algorithm/TreeRelatedProblem.class
 algorithm/Solution4.class
-algorithm/BFSRelatedProblem.class
 algorithm/Solution20.class
 common/Node.class
 algorithm/LeetCodeRelatedProblem.class
@@ -57,6 +59,7 @@ algorithm/OtherRelatedProblem$Producer.class
 algorithm/OtherRelatedProblem$Consumer.class
 algorithm/Solution31.class
 common/RandomNode.class
+algorithm/Solution51.class
 algorithm/BitCalculateProblem.class
 algorithm/Solution13.class
 algorithm/Solution2.class
@@ -66,11 +69,13 @@ algorithm/OtherRelatedProblem$PrintThread.class
 leetcode/problem/HappyCode.class
 algorithm/Solution33.class
 proxy/AllNumber.class
+algorithm/DivideAndConquerProblem.class
 algorithm/StringRelatedProblem$Record.class
 algorithm/OtherRelatedProblem$PrintThread$2.class
 algorithm/LinkedListProblem.class
 algorithm/RecursiveProblem.class
 algorithm/OtherRelatedProblem$Single.class
 algorithm/Solution6.class
+algorithm/Solution62.class
 algorithm/BigDataRelatedProblem.class
 algorithm/StackAndQueueProblem$TwoStackQueue.class
