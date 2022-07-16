@@ -18,8 +18,6 @@ public class PersonalTest {
     public static void main(String[] args) {
 
 
-        Solution22 solution = new Solution22();
-
     }
 
     /**
@@ -256,4 +254,9 @@ class Solution22 {
             return head2;
         }
     }
+}
+
+class PersonalProgress {
+
+
 }

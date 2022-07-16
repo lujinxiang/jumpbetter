@@ -13,7 +13,7 @@ public class SortRelatedProblem {
 
     public static void main(String[] args) {
 
-        int[] arr = new int[]{2, 1, 3,-1};
+        int[] arr = new int[]{2, 1, 5, 3};
         int[] res = heapSort(arr);
         System.out.println(res);
     }
@@ -99,7 +99,6 @@ public class SortRelatedProblem {
         for (int i = left; i <= right; i++)
             a[i] = tmp[i];
     }
-
 
 
     /**
