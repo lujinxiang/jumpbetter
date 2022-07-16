@@ -91,6 +91,7 @@ class Solution {
             res.add(new ArrayList<>(path));
             return;
         }
+        //这边做了剪枝操作；i <= n - (k - path.size()) + 1
         for (int i = startIndex; i <= n - (k - path.size()) + 1; i++) {
             path.add(i);
             dfs(n, k, i + 1);
