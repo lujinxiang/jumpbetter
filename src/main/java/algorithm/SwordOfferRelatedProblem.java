@@ -14,11 +14,22 @@ import static java.util.Arrays.binarySearch;
 public class SwordOfferRelatedProblem {
 
     public static void main(String[] args) {
-        Node instance = Node.getInstance();
-        reverseNode(instance);
-        String s = "we are happy";
-        replaceBlank(s.toCharArray());
 
+        TreeNode root = new TreeNode(1);
+        TreeNode left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left = left;
+        left.left = new TreeNode(4);
+        left.right = new TreeNode(5);
+
+        List<List<TreeNode>> res = printBinaryTreeByLevel(root);
+        for (int i = 0; i < res.size(); i++) {
+            List<TreeNode> treeNodes = res.get(i);
+            for (int j = 0; j < treeNodes.size(); j++) {
+                System.out.print(treeNodes.get(j).val + " ");
+            }
+            System.out.println();
+        }
     }
 
 
@@ -340,17 +351,53 @@ public class SwordOfferRelatedProblem {
 
     /**
      * 二叉树的下一个结点
-     *
+     * <p>
      * 题目：给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。
      * 注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
      */
+    public static TreeNode findNextNode(TreeNode root, TreeNode targetNode) {
+
+
+        return null;
+    }
 
 
     /**
      * 对称的二叉树
-     *
+     * <p>
      * 题目：请实现一个函数，用来判断一颗二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。
      */
+    public static boolean isSimilarTree(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isSimilarTree(root.left, root.right);
+    }
+
+    /**
+     * 递归函数判断左右子树是否是对称的二叉树
+     *
+     * @param left
+     * @param right
+     * @return
+     */
+    private static boolean isSimilarTree(TreeNode left, TreeNode right) {
+        if (left == null && right == null) {
+            return true;
+        } else if (left == null && right != null) {
+            return false;
+        } else if (left != null && right == null) {
+            return false;
+        } else if (left.val != right.val) {
+            return false;
+        }
+        //比较外层的节点是否相等
+        boolean outSide = isSimilarTree(left.left, right.right);
+        //比较内层的节点是否相等
+        boolean inSide = isSimilarTree(left.right, right.left);
+        return outSide && inSide;
+    }
+
 
     /**
      * 按之字顺序打印二叉树
@@ -361,9 +408,33 @@ public class SwordOfferRelatedProblem {
 
     /**
      * 把二叉树打印成多行
-     *
+     * <p>
      * 题目：从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。
      */
+    public static List<List<TreeNode>> printBinaryTreeByLevel(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<TreeNode>> res = new ArrayList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int queueSize = queue.size();
+            List<TreeNode> temp = new ArrayList<>();
+            for (int i = 0; i < queueSize; i++) {
+                TreeNode cur = queue.poll();
+                temp.add(cur);
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+            res.add(temp);
+        }
+        return res;
+    }
 
 
     /**
@@ -444,9 +515,38 @@ public class SwordOfferRelatedProblem {
 
     /**
      * 二叉搜索树的第k个结点
+     * <p>
+     * 注意事项：不能直接传入k，必须传入k的引用才可以；
+     * <p>
+     * 完成情况：done
      */
     public static TreeNode kthNode(TreeNode root, int k) {
-        return null;
+        if (root == null) {
+            return null;
+        }
+        List<TreeNode> res = new ArrayList<>();
+
+        List<Integer> kth = new ArrayList<>();
+        kth.add(k);
+        findTree(root, kth, res);
+        return res.get(0);
+    }
+
+    private static void findTree(TreeNode root, List<Integer> kth, List<TreeNode> res) {
+        if (root == null) {
+            return;
+        }
+        findTree(root.left, kth, res);
+
+        int temp = kth.get(0) - 1;
+        kth.remove(0);
+        kth.add(temp);
+        if (temp == 0) {
+            res.add(root);
+            return;
+        }
+
+        findTree(root.right, kth, res);
     }
 
 
@@ -732,18 +832,15 @@ public class SwordOfferRelatedProblem {
     }
 
 
-    /**
-     * 字符串的排列
-     *
-     * 题目：输入一个字符串,按字典序打印出该字符串中字符的所有排列。
-     * 例如输入字符串abc，则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
-     */
 
     /**
      * 第一个只出现一次的字符
      *
      * 题目：在一个字符串(1<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置。
      */
+
+
+
 
     /**
      * 左旋转字符串
