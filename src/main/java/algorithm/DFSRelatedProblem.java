@@ -22,7 +22,6 @@ public class DFSRelatedProblem {
     }
 
 
-
     /**
      * 2.火柴摆正方形
      * <p>
@@ -107,13 +106,14 @@ public class DFSRelatedProblem {
     private static void dfs(List<List<Integer>> outer, List<Integer> inner, int[] arr, int index) {
         outer.add(new ArrayList<Integer>(inner));
         for (int i = index; i < arr.length; i++) {
-            inner.add(arr[i]); //① 加入 nums[i]
-            dfs(outer, inner, arr, i + 1);//② 递归
-            inner.remove(inner.size() - 1);//③ 移除 nums[i]
+            //① 加入 nums[i]
+            inner.add(arr[i]);
+            //② 递归
+            dfs(outer, inner, arr, i + 1);
+            //③ 移除 nums[i]
+            inner.remove(inner.size() - 1);
         }
     }
-
-
 
 
 
