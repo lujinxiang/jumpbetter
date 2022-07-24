@@ -57,14 +57,77 @@ public class PersonalTest {
         }
 */
 
+/*
+        PersonalProgress8 progress8 = new PersonalProgress8();
+        int[] arr = new int[]{0, 0, 1, 1, 1, 1, 2, 3, 3};
+        int i = progress8.removeDuplicates2(arr);
+        System.out.print(i);*/
 
-      /*  PersonalProgress8 progress8 = new PersonalProgress8();
-        int[] arr = new int[]{9};
-        int[] res = progress8.plusOne(arr);
+
+/*        PersonalProgress11 personalProgress11 = new PersonalProgress11();
+        personalProgress11.generateParenthesis2(2);*/
+
+
+        /* PersonalProgress11 progress11 = new PersonalProgress11();
+
+         *//*        String res = progress11.multiply("123456789", "987654321");
+        System.out.print(res);*//*
+
+        String s = progress11.multiply("123", "45");
+        System.out.print(s);*/
+
+ /*       PersonalProgress12 progress12 = new PersonalProgress12();
+        double v = progress12.myPow2(2, 10);
+        System.out.print(v);
+*/
+/*
+        PersonalProgress4 progress4 = new PersonalProgress4();
+        TreeNode root = new TreeNode(2);
+        TreeNode leftNode = new TreeNode(1);
+        root.left = leftNode;
+        root.right = new TreeNode(3);
+        boolean res = progress4.isValidBST(root);
         System.out.print(res);*/
 
-        PersonalProgress11 personalProgress11 = new PersonalProgress11();
-        personalProgress11.isValid("(){}}{");
+/*        PersonalProgress9 progress9 = new PersonalProgress9();
+        ListNode head = new ListNode(2);
+        head.next = new ListNode(2);
+
+
+        ListNode newHead = progress9.deleteDuplicates(head);
+        while (newHead != null) {
+            System.out.print(newHead.val + "");
+            newHead = newHead.next;
+        }*/
+/*
+        PersonalProgress8 progress8 = new PersonalProgress8();
+        int[] arr = new int[]{3, 2, 1, 0, 4};
+        progress8.canJump(arr);*/
+/*
+        PersonalProgress12 progress12 = new PersonalProgress12();
+        int res = progress12.numDecodings("12346");
+        System.out.print(res);*/
+
+
+/*        PersonalProgress1 progress1 = new PersonalProgress1();
+        int[] arr = new int[]{100, 200, 4, 12};
+        List<List<Integer>> res = progress1.combinationSum(arr, 400);
+        for (int i = 0; i < res.size(); i++) {
+            List<Integer> inners = res.get(i);
+            for (Integer temp : inners) {
+                System.out.print(temp + " ");
+
+            }
+            System.out.println();
+        }*/
+
+        PersonalProgress10 progress10 = new PersonalProgress10();
+        char[][] board = {{'A', 'B', 'D'}, {'D', 'E', 'F'}, {'A', 'N', 'C'}};
+        progress10.exist2(board, "ABED");
+
+/*        PersonalProgress1 progress1 = new PersonalProgress1();
+        int[] arr = new int[]{1, 2, 3};
+        progress1.findQue(arr);*/
 
 
     }
@@ -453,6 +516,118 @@ class PersonalProgress1 {
     }
 
 
+    /**
+     * 下一个排列
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     */
+    public void nextPermutation(int[] nums) {
+        if (nums.length == 1) {
+            return;
+        }
+        int high = nums.length - 1;
+        int low = high - 1;
+        if (nums[low] < nums[high]) {
+            swap(nums, low, high);
+            return;
+        } else {
+            while (low >= 0 && nums[low] >= nums[high]) {
+                high = high - 1;
+                low = high - 1;
+            }
+            if (low == -1) {
+                //排完序的数组；
+                Arrays.sort(nums);
+                return;
+            } else {
+                //寻找diff最小的值替代low位置上的值；然后对high-arr.length-1位置上的值进行排序；
+                int index = findMinDiffIndex(low, nums.length - 1, nums);
+                swap(nums, low, index);
+                Arrays.sort(nums, high, nums.length);
+                return;
+            }
+        }
+    }
+
+    private int findMinDiffIndex(int low, int maxIndex, int[] arr) {
+        int minDiff = Integer.MAX_VALUE;
+        int res = low;
+        for (int i = low + 1; i <= maxIndex; i++) {
+            if (arr[i] <= arr[low]) {
+                continue;
+            }
+            if (Math.abs(arr[i] - arr[low]) < minDiff) {
+                res = i;
+            }
+        }
+        return res;
+    }
+
+    private void swap(int[] arr, int low, int high) {
+        int temp = arr[low];
+        arr[low] = arr[high];
+        arr[high] = temp;
+    }
+
+
+    /**
+     * 组合总和
+     * 需求：arr[2,2,3,7] 无重复元素数组，每个数字可以被重复选择
+     *
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        LinkedList<Integer> path = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        int sum = 0;
+        dfs(map, candidates, target, res, path, sum);
+        return res;
+    }
+
+    private void dfs(HashMap<String, Integer> map, int[] candidates, int target, List<List<Integer>> res, LinkedList<Integer> path, int sum) {
+        if (sum == target) {
+            //String pathString = toListString(new ArrayList<>(path));
+           /* if (!map.containsKey(pathString)) {
+                //setMap(map, pathString);
+
+            }*/
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        if (sum > target) {
+            return;
+        }
+        for (int i = 0; i < candidates.length; i++) {
+            sum += candidates[i];
+            path.addLast(candidates[i]);
+            dfs(map, candidates, target, res, path, sum);
+            path.removeLast();
+            sum -= candidates[i];
+        }
+    }
+
+    private void setMap(HashMap<String, Integer> map, String path) {
+        if (map.containsKey(path)) {
+            return;
+        } else {
+            map.put(path, 1);
+        }
+    }
+
+    private String toListString(List<Integer> path) {
+        path.sort(Integer::compareTo);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < path.size(); i++) {
+            sb.append(path.get(i));
+        }
+        return sb.toString();
+    }
+
 }
 
 
@@ -604,7 +779,58 @@ class PersonalProgress3 {
         return dp[grid.length - 1][grid[0].length - 1];
     }
 
+    /**
+     * 最长有效括号
+     *
+     * @param s
+     * @return
+     */
+    public int longestValidParentheses(String s) {
+        return 0;
+    }
+
+
+    /**
+     * 不同路径
+     * <p>
+     * 完成情况：done
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+    public int uniquePaths(int m, int n) {
+        //m代表行，n代表列
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 0; i < n; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+
+
+    /**
+     * 不同路径II
+     * <p>
+     * 带着障碍物的不同路径
+     *
+     * @param obstacleGrid
+     * @return
+     */
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+
+        return 0;
+    }
 }
+
 
 /**
  * 二叉树、二叉搜索树相关
@@ -718,6 +944,79 @@ class PersonalProgress4 {
         dfs(root.right, res);
     }
 
+    /**
+     * 验证二叉搜索树
+     * <p>
+     * <p>
+     * 二叉搜索树：
+     * 1. 左子树的最右节点< root 节点
+     * 2. 右子树的最左节点> root 节点
+     * 3. 左子树所有节点都< root节点
+     * 4. 右子树所有节点都> root节点
+     * <p>
+     * 3.二叉搜索树的特质：中序遍历的数组是排序数组；
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(TreeNode root) {
+        return dfs(root);
+    }
+
+    private boolean dfs(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean leftFlag = dfs(root.left);
+        boolean flag = false;
+        TreeNode leftCurNode = findLeftTreeRightNode(root.left);
+        TreeNode rightCurNode = findRightTreeLeftNode(root.right);
+        if (leftCurNode != null && rightCurNode != null) {
+            flag = leftCurNode.val < root.val && root.val < rightCurNode.val;
+        } else if (leftCurNode == null && rightCurNode != null) {
+            flag = root.val < rightCurNode.val;
+        } else if (leftCurNode != null && rightCurNode == null) {
+            flag = leftCurNode.val < root.val;
+        } else if (leftCurNode == null && rightCurNode == null) {
+            flag = true;
+        }
+        boolean rightFlag = dfs(root.right);
+        return leftFlag && flag && rightFlag;
+    }
+
+
+    /**
+     * 寻找左子树的最右节点
+     *
+     * @param root
+     * @return
+     */
+    private TreeNode findLeftTreeRightNode(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        while (root.right != null) {
+            root = root.right;
+        }
+        return root;
+    }
+
+
+    /**
+     * 寻找左子树的最右节点
+     */
+    private TreeNode findRightTreeLeftNode(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        while (root.left != null) {
+            root = root.left;
+        }
+        return root;
+    }
 }
 
 /**
@@ -1057,6 +1356,119 @@ class PersonalProgress8 {
     }
 
 
+    /**
+     * 删除有序数组中的重复项 II
+     * <p>
+     * 原地修改数组，空间复杂度O(1)
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates(int[] nums) {
+        int startIndex = 0;
+        int endIndex = startIndex;
+        int duplicateSize = 1;
+        int threshold = 2;
+        int allStep = 0;
+        int numLength = nums.length;
+        for (int i = 0; i <= numLength - 1; i++) {
+            startIndex = endIndex = i;
+            //找当前startIndex重复的数据；
+            while (endIndex < numLength) {
+                endIndex++;
+                if (endIndex < numLength && nums[endIndex] == nums[startIndex]) {
+                    duplicateSize++;
+                } else {
+                    break;
+                }
+            }
+            if (duplicateSize > threshold) {
+                //所有元素往前移动duplicateSize-threshold位；
+                int step = duplicateSize - threshold;
+                allStep += step;
+                removeSameNumber(endIndex - 1, nums, step);
+                i = endIndex - step - 1;
+                numLength = numLength - step;
+            }
+            duplicateSize = 1;
+        }
+        return nums.length - allStep;
+    }
+
+    private void removeSameNumber(int endIndex, int[] nums, int step) {
+        for (int i = endIndex; i <= nums.length - 1; i++) {
+            nums[i - step] = nums[i];
+        }
+    }
+
+
+    /**
+     * 删除有序数组中的重复项 II (方式2)
+     * <p>
+     * <p>
+     * 利用双指针
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates2(int[] nums) {
+        int low = 1;
+        for (int high = 2; high < nums.length; high++) {
+            if (nums[high] == nums[low] && nums[high] == nums[low - 1]) {
+                continue;
+            }
+            low += 1;
+            nums[low] = nums[high];
+        }
+        return low + 1;
+    }
+
+
+    /**
+     * 跳跃游戏
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canJump(int[] nums) {
+
+
+        return false;
+    }
+
+    /**
+     * BFS 解决跳跃问题
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canJump2(int[] nums) {
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] visited = new boolean[nums.length];
+        q.offer(0);
+        while (!q.isEmpty()) {
+            for (int size = q.size(); size > 0; size--) {
+                // idx is current position
+                int idx = q.remove();
+                // if this condition is true, we can find an answer
+                if (idx >= nums.length - 1) return true;
+                // i is the next rightmost position we can reach
+                for (int i = idx + 1; i < nums.length &&
+                        i <= idx + nums[idx]; i++) {
+                    if (visited[i]) continue;
+                    visited[i] = true;
+                    q.offer(i);
+                }
+            }
+        }
+        return false;
+    }
+
+
 }
 
 
@@ -1071,14 +1483,56 @@ class PersonalProgress9 {
      * <p>
      * 题目: 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。
      * 你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+     * <p>
+     * 完成情况：done
      *
      * @param head
      * @return
      */
     public ListNode swapPairs(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return head;
+        }
+        //指向第一个节点
+        ListNode low = head;
+        // 指向第二个节点，这样可以保证每次反转low-high范围内的节点；
+        // low和high的step=2;
+        ListNode high = low.next;
+        ListNode newHead = null;
+        ListNode curHead = reverseNode(low, high);
+        newHead = curHead;
+        low = newHead;
+        high = low.next;
+        while (low != null && low.next != null && low.next.next != null && high != null) {
+            //low和high同时后移两位；
+            if (low.next != null) {
+                low = low.next.next;
+            }
+            if (high.next != null) {
+                high = high.next.next;
+            }
+            if (high != null && low != null) {
+                ListNode curNode = reverseNode(low, high);
+                curHead.next.next = curNode;
+                curHead = curHead.next.next;
+                low = curNode;
+                high = curNode.next;
+            }
+        }
+        return newHead;
+    }
 
-
-        return null;
+    private ListNode reverseNode(ListNode low, ListNode high) {
+        if (high == null) {
+            return low;
+        }
+        ListNode temp = high.next;
+        high.next = low;
+        low.next = temp;
+        return high;
     }
 
 
@@ -1145,6 +1599,116 @@ class PersonalProgress9 {
         return head;
     }
 
+
+    /**
+     * 合并两个有序列表
+     * <p>
+     * 完成情况：done
+     *
+     * @param list1
+     * @param list2
+     * @return
+     */
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        if (list1 == null) {
+            return list2;
+        }
+        if (list2 == null) {
+            return list1;
+        }
+        ListNode newHead = new ListNode(0);
+        ListNode curNode = newHead;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                curNode.next = new ListNode(list1.val);
+                list1 = list1.next;
+                curNode = curNode.next;
+            } else if (list1.val > list2.val) {
+                curNode.next = new ListNode(list2.val);
+                list2 = list2.next;
+                curNode = curNode.next;
+            } else if (list1.val == list2.val) {
+                curNode.next = new ListNode(list1.val);
+                curNode = curNode.next;
+                curNode.next = new ListNode(list2.val);
+                list1 = list1.next;
+                list2 = list2.next;
+                curNode = curNode.next;
+            }
+        }
+        while (list1 != null) {
+            curNode.next = new ListNode(list1.val);
+            list1 = list1.next;
+            curNode = curNode.next;
+        }
+        while (list2 != null) {
+            curNode.next = new ListNode(list2.val);
+            list2 = list2.next;
+            curNode = curNode.next;
+        }
+        return newHead.next;
+    }
+
+
+    /**
+     * 删除排序链表中的重复元素II
+     * <p>
+     * 完成情况：done
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return head;
+        }
+        ListNode curHead = head;
+        ListNode pre = null;
+        ListNode low = head;
+        ListNode high = low.next;
+        ListNode next = null;
+        while (high != null) {
+            next = high.next;
+            if (high.val == low.val) {
+                while (high != null) {
+                    high = high.next;
+                    if (high != null) {
+                        next = high.next;
+                    } else {
+                        next = null;
+                    }
+                    if (high != null && high.val != low.val) {
+                        break;
+                    }
+                }
+
+                if (pre == null) {
+                    curHead = high;
+                    low = curHead;
+                    if (curHead != null) {
+                        high = curHead.next;
+                    } else {
+                        high = null;
+                    }
+                } else {
+                    pre.next = high;
+                    low = high;
+                    high = next;
+                }
+            } else {
+                pre = low;
+                low = high;
+                high = next;
+            }
+        }
+        if (curHead != head) {
+            return curHead;
+        }
+        return head;
+    }
 }
 
 
@@ -1190,6 +1754,112 @@ class PersonalProgress10 {
         }
     }
 
+
+    /**
+     * 搜索二维矩阵
+     * <p>
+     * 完成情况：done
+     * <p>
+     * 思路：根据二维数组中数字排列的特性，从矩阵的左下角进行向右和向上的搜素；
+     *
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null) {
+            return false;
+        }
+        int row = matrix.length - 1;
+        boolean flag = false;
+        int col = 0;
+        while (row >= 0 && col < matrix[0].length) {
+            if (matrix[row][col] > target) {
+                row--;
+            } else if (matrix[row][col] < target) {
+                col++;
+            } else if (matrix[row][col] == target) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 单词搜索：自己写的，存在问题，有点思路没想通透；
+     *
+     * @param board
+     * @param word
+     * @return
+     */
+    public boolean exist(char[][] board, String word) {
+        if (word == null) {
+            return false;
+        }
+        char endStrCharacter = word.charAt(word.length() - 1);
+        List<String> res = new ArrayList<>();
+        String path = "";
+        boolean[][] used = new boolean[board.length][board.length];
+        int curRow = 0;
+        int curCol = 0;
+        dfs(res, path, used, board, curRow, curCol);
+        return false;
+    }
+
+    private void dfs(List<String> res, String path, boolean[][] used, char[][] board, int curRow, int curCol) {
+        if (curCol > board[0].length - 1 || curRow < 0 || curCol < 0 || curRow > board.length - 1) {
+            return;
+        }
+        if (curRow == board.length - 1 && curCol == board[0].length - 1) {
+            res.add(path);
+            return;
+        }
+        if (!used[curRow][curCol]) {
+            path += board[curRow][curCol];
+        }
+        used[curRow][curCol] = true;
+        dfs(res, path, used, board, curRow + 1, curCol);
+        dfs(res, path, used, board, curRow - 1, curCol);
+        dfs(res, path, used, board, curRow, curCol + 1);
+        dfs(res, path, used, board, curRow, curCol - 1);
+        used[curRow][curCol] = false;
+        path.replaceFirst(Character.toString(board[curRow][curCol]), "");
+    }
+
+
+    public boolean exist2(char[][] board, String word) {
+        char[] words = word.toCharArray();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                //从[i,j]这个坐标开始查找
+                if (dfs(board, words, i, j, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    boolean dfs(char[][] board, char[] word, int i, int j, int index) {
+        //边界的判断，如果越界直接返回false。index表示的是查找到字符串word的第几个字符，
+        //如果这个字符不等于board[i][j]，说明验证这个坐标路径是走不通的，直接返回false
+        if (i >= board.length || i < 0 || j >= board[0].length || j < 0 || board[i][j] != word[index])
+            return false;
+        //如果word的每个字符都查找完了，直接返回true
+        if (index == word.length - 1)
+            return true;
+        //把当前坐标的值保存下来，为了在最后复原
+        char tmp = board[i][j];
+        //然后修改当前坐标的值
+        board[i][j] = '.';
+        //走递归，沿着当前坐标的上下左右4个方向查找
+        boolean res = dfs(board, word, i + 1, j, index + 1) || dfs(board, word, i - 1, j, index + 1) ||
+                dfs(board, word, i, j + 1, index + 1) || dfs(board, word, i, j - 1, index + 1);
+        //递归之后再把当前的坐标复原
+        board[i][j] = tmp;
+        return res;
+    }
 
 }
 
@@ -1263,19 +1933,293 @@ class PersonalProgress11 {
 
     /**
      * 括号生成
+     * <p>
+     * 回溯法：两种选择
+     * 1. "("
+     * 2. ")"
      *
      * @param n
      * @return
      */
     public List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
-        dfs(n, res);
+        if (n <= 0) {
+            return res;
+        }
+        dfs(n, "", res, 0, 0);
         return res;
     }
 
-    private void dfs(int n, List<String> res) {
+    private void dfs(int n, String path, List<String> res, int open, int close) {
+        // open记录左括号的个数；
+        // close记录右括号的个数；
+        if (open > n || close > open) {
+            return;
+        }
 
+        if (path.length() == 2 * n) {
+            res.add(path);
+            return;
+        }
+
+        dfs(n, path + "(", res, open + 1, close);
+        dfs(n, path + ")", res, open, close + 1);
     }
+
+
+    /**
+     * 方法2：生成了所有的括号组合；思路比较重要
+     *
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis2(int n) {
+        List<String> res = new ArrayList<>();
+        StringBuilder path = new StringBuilder();
+        char[] arr = new char[]{'(', ')'};
+        dfs(arr, res, path, n);
+        return res;
+    }
+
+    private void dfs(char[] arr, List<String> res, StringBuilder path, int n) {
+        if (path.length() == n * 2) {
+            res.add(path.toString());
+            return;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            path.append(arr[i]);
+            dfs(arr, res, path, n);
+            path.deleteCharAt(path.length() - 1);
+        }
+    }
+
+    /**
+     * 字符串相乘
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public String multiply(String num1, String num2) {
+        if (num1.length() == 1 && Integer.valueOf(num1) == 0) {
+            return "0";
+        }
+        if (num2.length() == 1 && Integer.valueOf(num2) == 0) {
+            return "0";
+        }
+        List<String> res = new ArrayList<>();
+        int overSize = 0;
+        boolean flag = false;
+        if (num1.length() < num2.length()) {
+            flag = true;
+        }
+        for (int i = flag == true ? num1.length() - 1 : num2.length() - 1; i >= 0; i--) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = flag == true ? num2.length() - 1 : num1.length() - 1; j >= 0; j--) {
+                int curSum = Integer.valueOf(Character.toString(flag == true ? num2.charAt(j) : num1.charAt(j)))
+                        * Integer.valueOf(Character.toString(flag == true ? num1.charAt(i) : num2.charAt(i))) + overSize;
+                int tempNum = curSum % 10;
+                overSize = curSum / 10;
+                sb.append(tempNum);
+            }
+            if (overSize != 0) {
+                sb.append(overSize);
+                overSize = 0;
+            }
+            int step = Math.abs((flag == true ? num1.length() : num2.length()) - 1 - i);
+            String resString = sb.reverse().toString();
+            for (int k = 0; k < step; k++) {
+                resString += "0";
+            }
+            res.add(resString);
+        }
+        String resStr = "";
+        for (String s : res) {
+            resStr = sumString(resStr, s);
+        }
+        return resStr;
+    }
+
+    /**
+     * 字符串的十进制求和
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public String sumString(String s1, String s2) {
+
+        if (s1 == null && s2 != null) {
+            return s2;
+        } else if (s1 != null && s2 == null) {
+            return s1;
+        } else if (s1 == null && s2 == null) {
+            return "";
+        }
+        int overSize = 0;
+
+
+        int size = s1.length() > s2.length() ? s1.length() : s2.length();
+        int diff = Math.abs(s1.length() - s2.length());
+        int index = size - 1;
+        StringBuilder res = new StringBuilder();
+        if (s1.length() < s2.length()) {
+            for (int i = 0; i < diff; i++) {
+                s1 = "0" + s1;
+            }
+        } else {
+            for (int i = 0; i < diff; i++) {
+                s2 = "0" + s2;
+            }
+        }
+        while (index >= 0) {
+            int curSum = Integer.valueOf(Character.toString(s1.charAt(index))) +
+                    Integer.valueOf(Character.toString(s2.charAt(index))) + overSize;
+            int curNum = curSum % 10;
+            overSize = curSum / 10;
+            res.append(curNum);
+            index--;
+        }
+        if (overSize != 0) {
+            res.append(overSize);
+        }
+        return res.reverse().toString();
+    }
+
+}
+
+/**
+ * 数字相关
+ */
+class PersonalProgress12 {
+
+    /**
+     * Pow(x,n)
+     * <p>
+     * 暴力破解：超出时间限制；
+     *
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        if (x == 1) {
+            return 1;
+        }
+        double res = 1.0;
+        double temp = -1.0;
+        if (n < 0) {
+            temp = temp * n;
+        } else {
+            temp = n;
+        }
+        for (int i = 0; i < temp; i++) {
+            res = res * x;
+        }
+        if (n < 0) {
+            res = 1 / res;
+        }
+        return res;
+    }
+
+
+    /**
+     * Pow(x,n)：使用递归实现
+     * <p>
+     * 存在栈溢出
+     *
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow2(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        if (x == 1) {
+            return 1;
+        }
+        if (n < 0) {
+            return 1 / dfs(x, -1 * n);
+        }
+        return dfs(x, n);
+    }
+
+    private double dfs(double x, int n) {
+        if (n == 0) {
+            return 1;
+        }
+        return x * dfs(x, n - 1);
+    }
+
+
+    /**
+     * 二进制位移
+     *
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow3(double x, int n) {
+        return 0.0;
+    }
+
+
+    /**
+     * 解码方法
+     * <p>
+     * <p>
+     * 使用动态规划来实现，但是我这个实现方式可能有问题；
+     *
+     * @param s
+     * @return
+     */
+    public int numDecodings(String s) {
+        int[][] dp = new int[s.length()][s.length()];
+        for (int k = 0; k < s.length(); k++) {
+            if (s.charAt(k) != 0) {
+                dp[k][k] = 1;
+            }
+        }
+        for (int i = s.length() - 2; i >= 0; i--) {
+            for (int j = i + 1; j <= s.length() - 1; j++) {
+                //行数字
+                int rowNum = Integer.valueOf(Character.toString(s.charAt(i)));
+                int colNum = Integer.valueOf(Character.toString(s.charAt(j)));
+                //当前字符和前一个字符组成的数字
+                String twoString = s.substring(j - 1, j + 1);
+                int twoNums = Integer.valueOf(s.substring(j - 1, j + 1));
+                if (rowNum == 0) {
+                    dp[i][j] = 0;
+                    continue;
+                }
+                if (twoString.startsWith("0") && colNum == 0) {
+                    dp[i][j] = dp[i][j - 1];
+                    continue;
+                }
+                if (twoNums <= 26) {
+                    if (dp[i + 1][j] == dp[i][j - 1] && dp[i + 1][j] == 1) {
+                        dp[i][j] = dp[i + 1][j] + dp[i][j - 1];
+                    } else if (dp[i + 1][j] == dp[i][j - 1]) {
+                        dp[i][j] = dp[i + 1][j] + dp[i][j - 1] - 1;
+                    } else if (dp[i + 1][j] != dp[i][j - 1]) {
+                        dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                    }
+                } else if (twoNums > 26) {
+                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[0][s.length() - 1];
+    }
+
 
 }
 
