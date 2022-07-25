@@ -99,10 +99,10 @@ public class PersonalTest {
             System.out.print(newHead.val + "");
             newHead = newHead.next;
         }*/
-/*
         PersonalProgress8 progress8 = new PersonalProgress8();
-        int[] arr = new int[]{3, 2, 1, 0, 4};
-        progress8.canJump(arr);*/
+        int[] nums1 = new int[]{4, 5, 6, 0, 0, 0};
+        int[] nums2 = new int[]{1, 2, 3};
+        progress8.merge(nums1, 3, nums2, 3);
 /*
         PersonalProgress12 progress12 = new PersonalProgress12();
         int res = progress12.numDecodings("12346");
@@ -120,10 +120,18 @@ public class PersonalTest {
             }
             System.out.println();
         }*/
-
+/*
         PersonalProgress10 progress10 = new PersonalProgress10();
-        char[][] board = {{'A', 'B', 'D'}, {'D', 'E', 'F'}, {'A', 'N', 'C'}};
-        progress10.exist2(board, "ABED");
+        int[][] board = {{4, 5}, {1, 4}, {0, 1}};
+        int[][] res = progress10.merge(board);
+
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < res[0].length; j++) {
+                System.out.print(res[i][j] + " ");
+            }
+            System.out.println();
+        }*/
+
 
 /*        PersonalProgress1 progress1 = new PersonalProgress1();
         int[] arr = new int[]{1, 2, 3};
@@ -1469,6 +1477,50 @@ class PersonalProgress8 {
     }
 
 
+    /**
+     * 合并两个有序数组
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        if (nums1 == null && nums2 == null) {
+            return;
+        }
+        if (m <= 0 && n <= 0) {
+            return;
+        }
+        if (m > 0 && n <= 0) {
+            return;
+        }
+        int low1 = 0;
+        int low2 = 0;
+        int step = 0;
+        while (low1 < m + step && low2 < n) {
+            if (nums1[low1] < nums2[low2]) {
+                low1++;
+            } else if (nums1[low1] >= nums2[low2]) {
+                moveArr(low1, nums1, m + step);
+                nums1[low1] = nums2[low2];
+                low2++;
+                low1++;
+                step++;
+            }
+        }
+        while (low2 < n) {
+            nums1[low1++] = nums2[low2++];
+        }
+    }
+
+    private void moveArr(int low1, int[] nums1, int m) {
+        for (int i = m - 1; i >= low1; i--) {
+            nums1[i + 1] = nums1[i];
+        }
+    }
 }
 
 
@@ -1709,6 +1761,47 @@ class PersonalProgress9 {
         }
         return head;
     }
+
+
+    /**
+     * 分隔链表：未完成
+     *
+     * @param head
+     * @param x
+     * @return
+     */
+    public ListNode partition(ListNode head, int x) {
+        if (head == null) {
+            return null;
+        }
+        ListNode targetIndex = null;
+        while (head != null) {
+            if (head.val == x) {
+                targetIndex = head;
+                break;
+            }
+            head = head.next;
+        }
+        if (targetIndex == null) {
+            return null;
+        }
+
+
+        ListNode low = head;
+        ListNode lowNext = low.next;
+        ListNode high = targetIndex.next;
+
+
+        if (high.val >= x) {
+            high = high.next;
+        } else {
+            low.next = high;
+            high.next = lowNext;
+            low = lowNext;
+        }
+        return null;
+    }
+
 }
 
 
@@ -1859,6 +1952,122 @@ class PersonalProgress10 {
         //递归之后再把当前的坐标复原
         board[i][j] = tmp;
         return res;
+    }
+
+
+    /**
+     * 合并区间
+     * <p>
+     * 完成情况：done 耗时较多
+     *
+     * @param intervals
+     * @return
+     */
+    public int[][] merge(int[][] intervals) {
+        int minIndex = findLowestIndex(intervals);
+        int nextIndex = findLowerIndex(intervals, minIndex, intervals[minIndex][0]);
+        if (intervals.length <= 1) {
+            return intervals;
+        }
+        int first = minIndex;
+        int next = nextIndex;
+        int firstLow = intervals[first][0];
+        int firstHigh = intervals[first][1];
+        int nextLow = intervals[next][0];
+        int nextHigh = intervals[next][1];
+        int size = 0;
+        int totalSize = 0;
+        int searchTime = 0;
+        while (searchTime < intervals.length - 1) {
+            //查看high位置的可能性，然后比较second的区间长度是否和first区间长度有重合，不就完事了；
+            if (nextHigh < firstLow) {
+                first = next;
+                next = next + 1;
+            } else if (nextHigh >= firstLow && nextHigh <= firstHigh) {
+                int step = nextHigh - nextLow;
+                int preStep = nextHigh - firstLow;
+                if (step >= preStep) {
+                    intervals[first][0] = nextLow;
+                } else {
+                    intervals[next][0] = intervals[first][0];
+                    intervals[next][1] = intervals[first][0];
+                }
+                size++;
+            } else if (nextHigh > firstHigh) {
+                int gap = nextLow - firstHigh;
+                int preLowStep = nextLow - firstLow;
+                if (gap <= 0) {
+                    if (preLowStep >= 0) {
+                        intervals[first][1] = nextHigh;
+                    } else {
+                        intervals[first][0] = intervals[next][0];
+                        intervals[first][1] = intervals[next][1];
+                    }
+                    size++;
+                }
+            }
+            if (size != 0) {
+                intervals[next][0] = intervals[first][0];
+                intervals[next][1] = intervals[first][1];
+                intervals[first][0] = Integer.MAX_VALUE;
+                totalSize += size;
+                size = 0;
+            }
+            first = next;
+            next = findLowerIndex(intervals, next, nextLow);
+            if (searchTime < intervals.length - 1) {
+                firstLow = intervals[first][0];
+                firstHigh = intervals[first][1];
+                nextLow = intervals[next][0];
+                nextHigh = intervals[next][1];
+                searchTime++;
+            }
+        }
+        int[][] res = null;
+        int index = 0;
+        if (totalSize != 0) {
+            res = new int[intervals.length - totalSize][intervals[0].length];
+            for (int i = 0; i < intervals.length; i++) {
+                if (intervals[i][0] != Integer.MAX_VALUE) {
+                    res[index++] = new int[]{intervals[i][0], intervals[i][1]};
+                }
+            }
+        }
+        if (res != null) {
+            return res;
+        }
+        return intervals;
+    }
+
+
+    private int findLowerIndex(int[][] intervals, int index, int value) {
+        int minNumber = Integer.MAX_VALUE;
+        int targetIndex = 0;
+        for (int i = 0; i < intervals.length; i++) {
+            if (i == index) {
+                continue;
+            }
+            if (Math.abs(intervals[i][0] - value) < minNumber && intervals[i][0] >= value) {
+                if (Math.abs(intervals[i][0] - value) < minNumber) {
+                    minNumber = intervals[i][0] - value;
+                    targetIndex = i;
+                }
+            }
+        }
+        return targetIndex;
+    }
+
+
+    private int findLowestIndex(int[][] intervals) {
+        int minNumber = Integer.MAX_VALUE;
+        int targetIndex = 0;
+        for (int i = 0; i < intervals.length; i++) {
+            if (intervals[i][0] < minNumber) {
+                minNumber = intervals[i][0];
+                targetIndex = i;
+            }
+        }
+        return targetIndex;
     }
 
 }
