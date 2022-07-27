@@ -99,10 +99,10 @@ public class PersonalTest {
             System.out.print(newHead.val + "");
             newHead = newHead.next;
         }*/
-        PersonalProgress8 progress8 = new PersonalProgress8();
+/*        PersonalProgress8 progress8 = new PersonalProgress8();
         int[] nums1 = new int[]{4, 5, 6, 0, 0, 0};
         int[] nums2 = new int[]{1, 2, 3};
-        progress8.merge(nums1, 3, nums2, 3);
+        progress8.merge(nums1, 3, nums2, 3);*/
 /*
         PersonalProgress12 progress12 = new PersonalProgress12();
         int res = progress12.numDecodings("12346");
@@ -138,6 +138,50 @@ public class PersonalTest {
         progress1.findQue(arr);*/
 
 
+/*        PersonalProgress4 progress4 = new PersonalProgress4();
+        TreeNode root = new TreeNode(1);
+        root.right = new TreeNode(5);
+        progress4.sumNumbers(root);*/
+/*
+
+        PersonalProgress11 progress11 = new PersonalProgress11();
+        String str = "aab";
+        progress11.partition(str);
+*/
+
+        PersonalProgress12 progress12 = new PersonalProgress12();
+        List<List<Integer>> arr = new ArrayList<>();
+        List<Integer> list1 = new ArrayList<>();
+        list1.add(2);
+        List<Integer> list2 = new ArrayList<>();
+        list2.add(3);
+        list2.add(4);
+        List<Integer> list3 = new ArrayList<>();
+        list3.add(6);
+        list3.add(5);
+        list3.add(7);
+        List<Integer> list4 = new ArrayList<>();
+        list4.add(4);
+        list4.add(1);
+        list4.add(8);
+        list4.add(3);
+        arr.add(list1);
+        arr.add(list2);
+        arr.add(list3);
+        arr.add(list4);
+        progress12.minimumTotal(arr);
+
+/*        PersonalProgress8 progress8 = new PersonalProgress8();
+        int[] arr = new int[]{4, 1, 2, 1, 2};
+        progress8.singleNumber(arr);*/
+
+
+/*        PersonalProgress9 progress9 = new PersonalProgress9();
+        ListNode root = new ListNode(4);
+        root.next = new ListNode(2);
+        root.next.next = new ListNode(1);
+        root.next.next.next = new ListNode(3);
+        progress9.insertionSortList(root);*/
     }
 
     /**
@@ -875,6 +919,7 @@ class PersonalProgress4 {
             }
             res.add(innerRes);
         }
+        Collections.reverse(res);
         return res;
     }
 
@@ -1025,6 +1070,247 @@ class PersonalProgress4 {
         }
         return root;
     }
+
+
+    /**
+     * 二叉树的最大深度
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftDepth = maxDepth(root.left);
+        int rightDepth = maxDepth(root.right);
+        return 1 + Math.max(leftDepth, rightDepth);
+    }
+
+
+    /**
+     * 二叉树的最小深度
+     * <p>
+     * 最小深度：从根节点到最近叶子节点的最短路径上的节点数量；
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        if (root.left == null && root.right == null) {
+            return 1;
+        }
+        int leftDepth = minDepth(root.left);
+        int rightDepth = minDepth(root.right);
+        if (leftDepth == 0) {
+            return rightDepth + 1;
+        } else if (rightDepth == 0) {
+            return leftDepth + 1;
+        }
+        return Math.min(leftDepth, rightDepth) + 1;
+    }
+
+    /**
+     * 平衡二叉树
+     * <p>
+     * 一个二叉树每个节点的左右两个子树的高度差的绝对值不超过 1 。
+     * <p>
+     * 思路：
+     * 1.分：对每个节点都看下左右子树的高度差；
+     * 2.合：比较左右子树的高度差；
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public boolean isBalanced(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        boolean leftChoose = isBalanced(root.left);
+        boolean rightChoose = isBalanced(root.right);
+        int leftDepth = maxDepth(root.left);
+        int rightDepth = maxDepth(root.right);
+        int diff = Math.abs(leftDepth - rightDepth);
+        return leftChoose && rightChoose && diff <= 1;
+    }
+
+
+    /**
+     * 求根节点到叶子节点数字之和
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public int sumNumbers(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> path = new LinkedList<>();
+        if (root == null) {
+            return 0;
+        }
+        findPath(root, path, res);
+        int sum = 0;
+        for (int i = 0; i < res.size(); i++) {
+            List<Integer> inners = res.get(i);
+            StringBuilder sb = new StringBuilder();
+            for (Integer temp : inners) {
+                sb.append(temp);
+            }
+            sum += Integer.valueOf(sb.toString());
+        }
+        return sum;
+    }
+
+    /**
+     * 寻找头节点---->叶子节点的全路径
+     *
+     * @param root
+     * @param path
+     * @param res
+     */
+    private void findPath(TreeNode root, LinkedList<Integer> path, List<List<Integer>> res) {
+        if (root == null) {
+            return;
+        }
+        //path.add(value)必须写在这边；
+        path.add(root.val);
+        if (root.left == null && root.right == null) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        if (root.left != null) {
+            findPath(root.left, path, res);
+            path.removeLast();
+        }
+        if (root.right != null) {
+            findPath(root.right, path, res);
+            path.removeLast();
+        }
+    }
+
+
+    /**
+     * 路径总和II:时间复杂度不低,运行时间较长；
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @param targetSum
+     * @return
+     */
+    public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> path = new LinkedList<>();
+        findPath(root, path, res, targetSum);
+        return res;
+    }
+
+    private void findPath(TreeNode root, LinkedList<Integer> path, List<List<Integer>> res, int targetSum) {
+        if (root == null) {
+            return;
+        }
+        //path.add(value)必须写在这边；
+        path.add(root.val);
+        if (root.left == null && root.right == null && getPathSum(path) == targetSum) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        if (root.left != null) {
+            findPath(root.left, path, res, targetSum);
+            path.removeLast();
+        }
+        if (root.right != null) {
+            findPath(root.right, path, res, targetSum);
+            path.removeLast();
+        }
+    }
+
+    private int getPathSum(List<Integer> path) {
+        if (path == null) {
+            return 0;
+        }
+        int sum = 0;
+        for (Integer temp : path) {
+            sum += temp;
+        }
+        return sum;
+    }
+
+
+    /**
+     * 从前序和中序遍历序列构造二叉树
+     * <p>
+     * 1.前序序列第一个元素为root节点；
+     * 2.root节点到中序序列中选择位置；
+     * 3.位置左边为左子树节点，位置右边为右子树节点；
+     *
+     * @param preorder
+     * @param inorder
+     * @return
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null) {
+            return null;
+        }
+        if (preorder.length != inorder.length) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[0]);
+        root.left = preConstructTree(preorder, inorder, 0);
+        root.right = preConstructTree(preorder, inorder, 0);
+        return root;
+    }
+
+    /**
+     * 构建树
+     *
+     * @param preorder
+     * @param inorder
+     * @return
+     */
+    private TreeNode preConstructTree(int[] preorder, int[] inorder, int startIndex) {
+        int targetIndex = 0;
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == preorder[startIndex]) {
+                targetIndex = i;
+                break;
+            }
+        }
+        TreeNode root = new TreeNode(startIndex);
+        root.left = preConstructTree(preorder, inorder, startIndex + 1);
+        root.right = preConstructTree(preorder, inorder, targetIndex + 1);
+        return root;
+    }
+
+
+    /**
+     * 二叉树中的最大路径和
+     * <p>
+     * 路径：被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。
+     * 同一个节点在一条路径序列中至多出现一次。该路径至少包含一个节点，且不一定经过根节点。
+     *
+     * @param root
+     * @return
+     */
+    public int maxPathSum(TreeNode root) {
+
+
+        return 0;
+    }
+
 }
 
 /**
@@ -1521,6 +1807,32 @@ class PersonalProgress8 {
             nums1[i + 1] = nums1[i];
         }
     }
+
+
+    /**
+     * 只出现一次的数字
+     * <p>
+     * 思路：本质上应该是要使用位运算来解答；
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        Arrays.sort(nums);
+        int start = 0;
+        int next = 1;
+        while (next < nums.length) {
+            if (nums[start] == nums[next]) {
+                start += 2;
+                next += 2;
+            } else {
+                break;
+            }
+        }
+        return nums[start];
+    }
 }
 
 
@@ -1802,6 +2114,87 @@ class PersonalProgress9 {
         return null;
     }
 
+
+    /**
+     * 环形链表
+     * <p>
+     * 思路：
+     * 快慢指针：快指针一次走两步，慢指针一次走一步，如果快指针追上了慢指针，则说明有环的存在；
+     * <p>
+     * 完成情况：done
+     *
+     * @param head
+     * @return
+     */
+    public boolean hasCycle(ListNode head) {
+        if (head == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        boolean flag = false;
+        while (slow != null && fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 对链表进行插入排序
+     * <p>
+     * <p>
+     * 插入排序：
+     * 1. 左边部分有序，右边部分遍历插入；
+     * 2. 左边部分始终从0位置开始，查找遍历数字插入的位置，然后插入即可；
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param head
+     * @return
+     */
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        //采用一个虚拟节点，便于在头部插入节点；
+        ListNode dummy = new ListNode(0);
+        ListNode pre = dummy;
+        ListNode cur = head;
+        ListNode preNext = dummy;
+        ListNode next = null;
+        dummy.next = head;
+        while (cur != null && cur.next != null) {
+            next = cur.next;
+            if (next.val > cur.val) {
+                cur = cur.next;
+            } else {
+                //寻找插入位置；
+                while (preNext != null) {
+                    preNext = pre.next;
+                    if (preNext.val < next.val) {
+                        pre = pre.next;
+                    } else {
+                        break;
+                    }
+                }
+                //pre和preNext节点之间插入next节点；
+                ListNode temp = next.next;
+                pre.next = next;
+                next.next = preNext;
+                cur.next = temp;
+                //pre重新指向dummy,每次都从dummy开始寻找插入位置；
+                pre = dummy;
+            }
+        }
+        return dummy.next;
+    }
 }
 
 
@@ -2299,6 +2692,96 @@ class PersonalProgress11 {
         return res.reverse().toString();
     }
 
+
+    /**
+     * 验证回文串
+     * <p>
+     * 完成情况:done
+     *
+     * @param s
+     * @return
+     */
+    public boolean isPalindrome(String s) {
+
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+
+        char[] chars = s.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+            if ((chars[i] >= 'A' && chars[i] <= 'Z')
+                    || (chars[i] >= 'a' && chars[i] <= 'z')
+                    || (chars[i] >= '0' && chars[i] <= '9')) {
+                sb.append(chars[i]);
+            }
+        }
+        String res = sb.toString().toLowerCase();
+        int startIndex = 0;
+        int endIndex = res.length() - 1;
+        boolean flag = true;
+        while (startIndex <= endIndex) {
+            if (res.charAt(startIndex) == res.charAt(endIndex)) {
+                startIndex++;
+                endIndex--;
+            } else {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 分割回文串
+     * <p>
+     * <p>
+     * 思路：分割回文串类比组合问题
+     * <p>
+     * 完成情况：done
+     *
+     * @param s
+     * @return
+     */
+    public List<List<String>> partition(String s) {
+        LinkedList<String> path = new LinkedList<>();
+        List<List<String>> res = new ArrayList<>();
+        int startIndex = 0;
+        partitionString(s, path, res, startIndex);
+        return res;
+    }
+
+    private void partitionString(String s, LinkedList<String> path, List<List<String>> res, int startIndex) {
+        //如果起始位置大于s的大小，说明找到了一组分割方案
+        if (startIndex >= s.length()) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        for (int i = startIndex; i < s.length(); i++) {
+            //如果是回文子串，则记录
+            if (isPalindrome(s, startIndex, i)) {
+                String str = s.substring(startIndex, i + 1);
+                path.addLast(str);
+            } else {
+                continue;
+            }
+            //起始位置后移，保证不重复
+            partitionString(s, path, res, i + 1);
+            path.removeLast();
+        }
+    }
+
+    //判断是否是回文串
+    private boolean isPalindrome(String s, int startIndex, int end) {
+        for (int i = startIndex, j = end; i < j; i++, j--) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
 
 /**
@@ -2427,6 +2910,43 @@ class PersonalProgress12 {
             }
         }
         return dp[0][s.length() - 1];
+    }
+
+
+    /**
+     * 三角形最小路径和
+     *
+     * @param triangle
+     * @return
+     */
+    public int minimumTotal(List<List<Integer>> triangle) {
+        if (triangle == null || triangle.size() == 0) {
+            return 0;
+        }
+        if (triangle.size() == 1) {
+            return triangle.get(0).get(0);
+        }
+        int sum = 0;
+        int firstIndex = triangle.size() - 2;
+        int nextIndex = firstIndex + 1;
+        int first = 0;
+        int next = getNextIndex(triangle, first, firstIndex);
+        sum += triangle.get(firstIndex).get(first);
+        while (nextIndex >= 0) {
+            sum += triangle.get(nextIndex).get(next);
+            firstIndex++;
+            nextIndex++;
+            first = next;
+            if (firstIndex < triangle.size() - 1 && first < triangle.size() - 1) {
+                next = getNextIndex(triangle, first, firstIndex);
+            }
+        }
+        return sum;
+    }
+
+    private int getNextIndex(List<List<Integer>> triangle, int first, int firstIndex) {
+        List<Integer> nextRowValue = triangle.get(firstIndex + 1);
+        return nextRowValue.get(first) < nextRowValue.get(first + 1) ? first : first + 1;
     }
 
 
