@@ -149,7 +149,7 @@ public class PersonalTest {
         progress11.partition(str);
 */
 
-        PersonalProgress12 progress12 = new PersonalProgress12();
+/*        PersonalProgress12 progress12 = new PersonalProgress12();
         List<List<Integer>> arr = new ArrayList<>();
         List<Integer> list1 = new ArrayList<>();
         list1.add(2);
@@ -169,7 +169,7 @@ public class PersonalTest {
         arr.add(list2);
         arr.add(list3);
         arr.add(list4);
-        progress12.minimumTotal(arr);
+        progress12.minimumTotal(arr);*/
 
 /*        PersonalProgress8 progress8 = new PersonalProgress8();
         int[] arr = new int[]{4, 1, 2, 1, 2};
@@ -182,6 +182,10 @@ public class PersonalTest {
         root.next.next = new ListNode(1);
         root.next.next.next = new ListNode(3);
         progress9.insertionSortList(root);*/
+
+        PersonalProgress13 progress13 = new PersonalProgress13();
+        int[] arr = new int[]{2, 1, 5, 6, 2, 3};
+        progress13.largestRectangleArea(arr);
     }
 
     /**
@@ -543,6 +547,38 @@ class PersonalProgress1 {
 
 
     /**
+     * 组合
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> path = new LinkedList<>();
+        int startIndex = 1;
+        dfs(path, res, n, k, startIndex);
+        return res;
+    }
+
+    private void dfs(LinkedList<Integer> path, List<List<Integer>> res, int n, int k, int startIndex) {
+        if (path.size() == k) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        //这边的i<=n-(k-path.size())+1做了剪枝的操作；
+        for (int i = startIndex; i <= n - (k - path.size()) + 1; i++) {
+            path.addLast(i);
+            dfs(path, res, n, k, i + 1);
+            path.removeLast();
+        }
+    }
+
+
+    /**
      * 带used参数的选择
      *
      * @param arr
@@ -881,6 +917,22 @@ class PersonalProgress3 {
 
         return 0;
     }
+
+
+    /**
+     * 买卖股票的最佳时机
+     * <p>
+     * dp[i][0]:第i天持有股票所得最多现金；
+     * dp[i][i]:第i天不持有股票所得最多现金；
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+
+        return 0;
+    }
+
 }
 
 
@@ -899,7 +951,7 @@ class PersonalProgress4 {
      */
     public List<List<Integer>> printTreeByLevel(TreeNode root) {
         if (root == null) {
-            return null;
+            return new ArrayList<>();
         }
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
@@ -2950,6 +3002,160 @@ class PersonalProgress12 {
     }
 
 
+}
+
+
+/**
+ * 单调栈
+ */
+class PersonalProgress13 {
+
+
+    /**
+     * 接雨水
+     *
+     * @param height
+     * @return
+     */
+    public int trap(int[] height) {
+        if (height == null || height.length <= 2) {
+            return 0;
+        }
+
+        // 思路：
+        // 单调不增栈，walls元素作为右墙依次入栈
+        // 出现入栈元素（右墙）比栈顶大时，说明在右墙左侧形成了低洼处，低洼处出栈并结算该低洼处能接的雨水
+
+        int water = 0;
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < height.length; i++) {
+            // 栈不为空，且当前元素（右墙）比栈顶（右墙的左侧）大：说明形成低洼处了
+            while (!stack.isEmpty() && height[i] > height[stack.peek()]) {
+                // 低洼处弹出，尝试结算此低洼处能积攒的雨水
+                int bottom = stack.pop();
+                // 看看栈里还有没有东西（左墙是否存在）
+                // 有右墙+有低洼+没有左墙=白搭
+                if (stack.isEmpty()) {
+                    break;
+                }
+
+                // 左墙位置以及左墙、右墙、低洼处的高度
+                int left = stack.peek();
+                int leftHeight = height[left];
+                int rightHeight = height[i];
+                int bottomHeight = height[bottom];
+
+                // 能积攒的水=(右墙位置-左墙位置-1) * (min(右墙高度, 左墙高度)-低洼处高度)
+                water += (i - left - 1) * (Math.min(leftHeight, rightHeight) - bottomHeight);
+            }
+
+            // 上面的pop循环结束后再push，保证stack是单调不增
+            stack.push(i);
+        }
+        return water;
+    }
+
+
+    /**
+     * 2.每日温度
+     */
+
+
+    /**
+     * 下一个更大元素
+     * <p>
+     * 思路：单调栈+哈希表
+     * <p>
+     * 1.第一个子问题：如何更高效地计算nums2中每个元素右边的第一个更大的值；
+     * 2.第二个子问题：如何存储第一个子问题的结果；
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        int[] res = new int[nums1.length];
+        Stack<Integer> stack = new Stack<>();
+        //key:nums[i],value:index;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = nums2.length - 1; i >= 0; i--) {
+            int num = nums2[i];
+            while (!stack.isEmpty() && stack.peek() <= num) {
+                stack.pop();
+            }
+            map.put(num, stack.isEmpty() ? -1 : stack.peek());
+            stack.push(num);
+        }
+        for (int i = 0; i < nums1.length; i++) {
+            res[i] = map.get(nums1[i]);
+        }
+        return res;
+    }
+
+    /**
+     * 4.去除重复字母
+     */
+
+
+    /**
+     * 5.股票价格跨度
+     */
+
+
+    /**
+     * 6.移掉k位数字
+     */
+
+
+    /**
+     * 7.最短无序连续子数组
+     */
+
+
+    /**
+     * 8.柱状图中最大的矩形
+     * <p>
+     * 思路1：两层for循环遍历
+     * 思路2：对每个元素，向左右分别寻找边界；
+     * 思路3：利用思路2，外加单调栈实现优化；
+     * <p>
+     * ps:
+     * 1.如果柱子的高度递减，那么每个柱子的左边界就是第一根柱子，右边界就是本身；
+     * 2.如果柱子的高度递增，那么每个柱子的右边界就是最后一根柱子，左边界就是本身；
+     * <p>
+     * <p>
+     * 完成情况：done
+     * <p>
+     */
+    public int largestRectangleArea(int[] heights) {
+        int len = heights.length;
+        int maxarea = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<Integer>();
+        for (int i = 0; i < len; ++i) {
+            // 只要栈不为空，并且当前遍历的数据小于栈顶元素，则说明找到了右边界
+            while (!stack.empty() && heights[i] < heights[stack.peek()]) {
+                // 右边界 heights[i]
+                int h = heights[stack.peek()];
+                stack.pop();
+                // 出栈后，如果栈为空，说明出栈的柱子目前遍历的最短的柱子，否则计算宽度差
+                int w = stack.empty() ? i : i - stack.peek() - 1;
+                maxarea = Math.max(h * w, maxarea);
+            }
+            // 栈为空或者当前遍历的数据大于等于栈顶数据，则入栈，不会执行上面的while循环
+            // 保证了栈中的数据总是递增的 比如  0 1 2 2 3 4 4 5 6 ...
+            stack.push(i);
+        }
+
+        // 处理剩余栈中的数据(递增的数据，右边界是柱状图中最右边的柱子)
+        while (!stack.empty()) {
+            int h = heights[stack.peek()];
+            stack.pop();
+            // 出栈后，如果栈为空，说明出栈的柱子目前遍历的最短的柱子，否则计算宽度差
+            int w = stack.empty() ? len : len - stack.peek() - 1;
+            maxarea = Math.max(h * w, maxarea);
+        }
+        return maxarea;
+    }
 }
 
 
