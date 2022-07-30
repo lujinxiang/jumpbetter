@@ -1305,46 +1305,13 @@ class PersonalProgress4 {
     /**
      * 从前序和中序遍历序列构造二叉树
      * <p>
-     * 1.前序序列第一个元素为root节点；
-     * 2.root节点到中序序列中选择位置；
-     * 3.位置左边为左子树节点，位置右边为右子树节点；
      *
      * @param preorder
      * @param inorder
      * @return
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        if (preorder == null || inorder == null) {
-            return null;
-        }
-        if (preorder.length != inorder.length) {
-            return null;
-        }
-        TreeNode root = new TreeNode(preorder[0]);
-        root.left = preConstructTree(preorder, inorder, 0);
-        root.right = preConstructTree(preorder, inorder, 0);
-        return root;
-    }
-
-    /**
-     * 构建树
-     *
-     * @param preorder
-     * @param inorder
-     * @return
-     */
-    private TreeNode preConstructTree(int[] preorder, int[] inorder, int startIndex) {
-        int targetIndex = 0;
-        for (int i = 0; i < inorder.length; i++) {
-            if (inorder[i] == preorder[startIndex]) {
-                targetIndex = i;
-                break;
-            }
-        }
-        TreeNode root = new TreeNode(startIndex);
-        root.left = preConstructTree(preorder, inorder, startIndex + 1);
-        root.right = preConstructTree(preorder, inorder, targetIndex + 1);
-        return root;
+        return null;
     }
 
 
@@ -1363,6 +1330,93 @@ class PersonalProgress4 {
         return 0;
     }
 
+
+    /**
+     * 完全二叉树的节点个数
+     *
+     * @param root
+     * @return
+     */
+    public int countNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftNodes = countNodes(root.left);
+        int rightNodes = countNodes(root.right);
+        return leftNodes + rightNodes + 1;
+    }
+
+    /**
+     * 对称二叉树
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return compare(root.left, root.right);
+    }
+
+    private boolean compare(TreeNode leftNode, TreeNode rightNode) {
+        if (leftNode == null && rightNode != null) {
+            return false;
+        } else if (leftNode != null && rightNode == null) {
+            return false;
+        } else if (leftNode == null && rightNode == null) {
+            return true;
+        } else if (leftNode.val != rightNode.val) {
+            return false;
+        }
+        //比较外面的值是否相等
+        boolean outSide = compare(leftNode.left, rightNode.right);
+        //比较里面的值是否相等
+        boolean inSide = compare(leftNode.right, rightNode.left);
+        return outSide && inSide;
+    }
+
+
+    /**
+     * 左叶子之和
+     * <p>
+     * 思路：可以使用层次遍历的方式来实现
+     * <p>
+     * 建议使用递归的方式来实现：后序遍历
+     *
+     * @param root
+     * @return
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftSum = sumOfLeftLeaves(root.left);
+        int rightSum = sumOfLeftLeaves(root.right);
+        int middleSum = 0;
+        //判断条件中才满足左叶子
+        if (root.left != null && root.left.left == null && root.left.right == null) {
+            middleSum += root.left.val;
+        }
+        return leftSum + rightSum + middleSum;
+    }
+
+    /**
+     * 找树左下角的值
+     * <p>
+     * 思路：1.递归：找到最后一行最开始的值；如何寻找最后一行？深度最大的叶子节点一定是最后一行；
+     * 思路：2.循环：使用层次遍历来实现；
+     *
+     * @param root
+     * @return
+     */
+    public int findBottomLeftValue(TreeNode root) {
+
+
+        return 0;
+    }
 }
 
 /**
@@ -3156,6 +3210,8 @@ class PersonalProgress13 {
         }
         return maxarea;
     }
+
+
 }
 
 
