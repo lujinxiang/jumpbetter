@@ -171,21 +171,27 @@ public class PersonalTest {
         arr.add(list4);
         progress12.minimumTotal(arr);*/
 
-/*        PersonalProgress8 progress8 = new PersonalProgress8();
-        int[] arr = new int[]{4, 1, 2, 1, 2};
-        progress8.singleNumber(arr);*/
+        PersonalProgress8 progress8 = new PersonalProgress8();
+        int[] arr = new int[]{2, 7, 11, 15};
+        progress8.twoSum(arr, 9);
 
 
-/*        PersonalProgress9 progress9 = new PersonalProgress9();
-        ListNode root = new ListNode(4);
-        root.next = new ListNode(2);
-        root.next.next = new ListNode(1);
-        root.next.next.next = new ListNode(3);
-        progress9.insertionSortList(root);*/
+ /*       PersonalProgress9 progress9 = new PersonalProgress9();
+        ListNode root = new ListNode(7);
+        root.next = new ListNode(7);
+        root.next.next = new ListNode(7);
+        root.next.next.next = new ListNode(7);
+        progress9.removeElements(root, 7);*/
 
-        PersonalProgress13 progress13 = new PersonalProgress13();
-        int[] arr = new int[]{2, 1, 5, 6, 2, 3};
-        progress13.largestRectangleArea(arr);
+/*        PersonalProgress4.PersonalProgress42 personalProgress42 = new PersonalProgress4.PersonalProgress42();
+        TreeNode root = new TreeNode(1);
+        TreeNode left = new TreeNode(2);
+        left.left = new TreeNode(4);
+        left.right = new TreeNode(5);
+        root.left = left;
+        root.right = new TreeNode(3);
+        int res = personalProgress42.getMinimumDifference(root);
+        System.out.print(res);*/
     }
 
     /**
@@ -1303,36 +1309,47 @@ class PersonalProgress4 {
 
 
     /**
-     * 从前序和中序遍历序列构造二叉树
+     * 从前序与中序遍历序列构造二叉树
      * <p>
+     * <p>
+     * 完成情况：done
      *
      * @param preorder
      * @param inorder
      * @return
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return null;
+        return buildTreeHelper(preorder, 0, preorder.length, inorder, 0, inorder.length);
     }
 
-
-    /**
-     * 二叉树中的最大路径和
-     * <p>
-     * 路径：被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。
-     * 同一个节点在一条路径序列中至多出现一次。该路径至少包含一个节点，且不一定经过根节点。
-     *
-     * @param root
-     * @return
-     */
-    public int maxPathSum(TreeNode root) {
-
-
-        return 0;
+    private TreeNode buildTreeHelper(int[] preorder, int p_start, int p_end, int[] inorder, int i_start, int i_end) {
+        // preorder 为空，直接返回 null
+        if (p_start == p_end) {
+            return null;
+        }
+        int root_val = preorder[p_start];
+        TreeNode root = new TreeNode(root_val);
+        //在中序遍历中找到根节点的位置
+        int i_root_index = 0;
+        for (int i = i_start; i < i_end; i++) {
+            if (root_val == inorder[i]) {
+                i_root_index = i;
+                break;
+            }
+        }
+        int leftNum = i_root_index - i_start;
+        //递归的构造左子树
+        root.left = buildTreeHelper(preorder, p_start + 1, p_start + leftNum + 1, inorder, i_start, i_root_index);
+        //递归的构造右子树
+        root.right = buildTreeHelper(preorder, p_start + leftNum + 1, p_end, inorder, i_root_index + 1, i_end);
+        return root;
     }
 
 
     /**
      * 完全二叉树的节点个数
+     * <p>
+     * 完成情况：done
      *
      * @param root
      * @return
@@ -1403,20 +1420,290 @@ class PersonalProgress4 {
         return leftSum + rightSum + middleSum;
     }
 
+
+    /**
+     * 二叉搜索树中的众数
+     * <p>
+     * 完成情况：done
+     */
+    static class PersonalProgress41 {
+
+        int maxCount = 0;
+        int count = 0;
+        TreeNode pre = null;
+
+        /**
+         * 二叉搜索树中的众数
+         *
+         * @param root
+         * @return
+         */
+        public int[] findMode(TreeNode root) {
+            List<Integer> res = new ArrayList<>();
+            inOrderFindMode(root, res);
+            int[] resArr = new int[res.size()];
+            for (int i = 0; i < res.size(); i++) {
+                resArr[i] = res.get(i);
+            }
+            return resArr;
+        }
+
+        /**
+         * @param root
+         * @param res
+         */
+        private void inOrderFindMode(TreeNode root, List<Integer> res) {
+            if (root == null) {
+                return;
+            }
+            inOrderFindMode(root.left, res);
+            if (pre == null) { // 第一个节点
+                count = 1;
+            } else if (pre.val == root.val) { // 与前一个节点数值相同
+                count++;
+            } else { // 与前一个节点数值不同
+                count = 1;
+            }
+            pre = root; // 更新上一个节点
+
+            if (count == maxCount) { // 如果和最大值相同，放进result中
+                res.add(root.val);
+            }
+
+            if (count > maxCount) { // 如果计数大于最大值
+                maxCount = count;
+                res.clear();     // 很关键的一步，不要忘记清空result，之前result里的元素都失效了
+                res.add(root.val);
+            }
+            inOrderFindMode(root.right, res);
+        }
+    }
+
+
+    /**
+     * 二叉搜索树的最小绝对差
+     * <p>
+     * 思路：递归遍历过程中，记录pre；
+     * <p>
+     * 完成情况：done
+     */
+    static class PersonalProgress42 {
+
+        //记录当前节点的前驱指针
+        TreeNode pre = null;
+
+        int res = Integer.MAX_VALUE;
+
+        /**
+         * 二叉搜索树的最小绝对差
+         *
+         * @param root
+         * @return
+         */
+        public int getMinimumDifference(TreeNode root) {
+            inOrderFindMinDifference(root);
+            return res;
+        }
+
+        private void inOrderFindMinDifference(TreeNode root) {
+            if (root == null) {
+                return;
+            }
+            inOrderFindMinDifference(root.left);
+            if (pre != null) {
+                res = Math.min(res, Math.abs(pre.val - root.val));
+            }
+            //pre记录前驱节点
+            pre = root;
+            inOrderFindMinDifference(root.right);
+        }
+    }
+
+    /**
+     * 二叉树的最近公共祖先
+     * <p>
+     * 完成情况：done
+     */
+    static class PersonalProgress43 {
+        /**
+         * 二叉树的最近公共祖先
+         * <p>
+         * 思路：后序遍历二叉树
+         *
+         * @param root
+         * @param p
+         * @param q
+         * @return
+         */
+        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            if (root == q || root == p || root == null) {
+                return root;
+            }
+            TreeNode left = lowestCommonAncestor(root.left, p, q);
+            TreeNode right = lowestCommonAncestor(root.right, p, q);
+            if (left != null && right != null) {
+                return root;
+            }
+            if (left == null) {
+                return right;
+            }
+            return left;
+        }
+    }
+
+
     /**
      * 找树左下角的值
      * <p>
-     * 思路：1.递归：找到最后一行最开始的值；如何寻找最后一行？深度最大的叶子节点一定是最后一行；
-     * 思路：2.循环：使用层次遍历来实现；
+     * 完成情况：done
+     */
+    static class PersonalProgress44 {
+
+        //记录：最大深度 （全局变量）
+        int maxLen = Integer.MIN_VALUE;
+        int maxLeftValue = 0;
+
+        /**
+         * 找树左下角的值
+         * <p>
+         * 思路：1.递归：找到最后一行最开始的值；如何寻找最后一行？深度最大的叶子节点一定是最后一行；
+         * 思路：2.循环：使用层次遍历来实现；层次遍历的最后一行的第一个元素即为所求结果；
+         *
+         * @param root
+         * @return
+         */
+        public int findBottomLeftValue(TreeNode root) {
+            preOrderFindBottomLeftValue(root, 0);
+            return maxLeftValue;
+        }
+
+        public void preOrderFindBottomLeftValue(TreeNode root, int leftLen) {
+            if (root == null) {
+                return;
+            }
+            if (root.left == null && root.right == null) {
+                //如果leftLen大于最大的maxLen,更新maxLeftValue;
+                if (leftLen > maxLen) {
+                    maxLen = leftLen;
+                    maxLeftValue = root.val;
+                    return;
+                }
+            }
+            if (root.left != null) {
+                preOrderFindBottomLeftValue(root.left, leftLen + 1);
+            }
+            if (root.right != null) {
+                preOrderFindBottomLeftValue(root.right, leftLen + 1);
+            }
+        }
+    }
+
+    /**
+     * 二叉树中的最大路径和
+     * <p>
+     * 完成情况：done
+     */
+    static class PersonalProgress45 {
+
+        int res = Integer.MIN_VALUE;
+
+        /**
+         * 二叉树中的最大路径和
+         * <p>
+         * 路径：被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。
+         * 同一个节点在一条路径序列中至多出现一次。该路径至少包含一个节点，且不一定经过根节点。
+         *
+         * @param root
+         * @return
+         */
+        public int maxPathSum(TreeNode root) {
+            dfs(root);
+            return res;
+        }
+
+        /**
+         * 函数的含义：dfs返回以该节点为端点的最大路径和；
+         *
+         * @param root
+         * @param
+         * @return
+         */
+        private int dfs(TreeNode root) {
+            if (root == null) {
+                return 0;
+            }
+            //左子树的最大路径和
+            int left = dfs(root.left);
+            //右子树的最大路径和
+            int right = dfs(root.right);
+            //左子树+root  或者  右子树+root的最大路径和
+            int middle = Math.max(root.val, root.val + Math.max(left, right));
+            //左子树+root+右子树的最大路径和；
+            res = Math.max(res, Math.max(middle, root.val + left + right));
+            return middle;
+        }
+    }
+
+    /**
+     * 二叉树的右视图
+     * <p>
+     * 完成情况：done
      *
      * @param root
      * @return
      */
-    public int findBottomLeftValue(TreeNode root) {
-
-
-        return 0;
+    public List<Integer> rightSideView(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        List<Integer> res = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                if (i == size - 1) {
+                    res.add(cur.val);
+                }
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+        }
+        return res;
     }
+
+
+    /**
+     * 翻转二叉树
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        //递归函数的终止条件，节点为空时返回
+        if (root == null) {
+            return null;
+        }
+        //下面三句是将当前节点的左右子树交换
+        TreeNode tmp = root.right;
+        root.right = root.left;
+        root.left = tmp;
+        //递归交换当前节点的 左子树
+        invertTree(root.left);
+        //递归交换当前节点的 右子树
+        invertTree(root.right);
+        //函数返回时就表示当前这个节点，以及它的左右子树
+        //都已经交换完了
+        return root;
+    }
+
 }
 
 /**
@@ -1436,11 +1723,26 @@ class PersonalProgress6 {
 }
 
 /**
- * 字符串相关
+ * 位运算相关
  */
 class PersonalProgress7 {
 
-
+    /**
+     * 位1的个数
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @return
+     */
+    public int hammingWeight(int n) {
+        int res = 0;
+        while (n != 0) {
+            n = n & (n - 1);
+            res += 1;
+        }
+        return res;
+    }
 }
 
 
@@ -1939,6 +2241,286 @@ class PersonalProgress8 {
         }
         return nums[start];
     }
+
+
+    /**
+     * 存在重复元素
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public boolean containsDuplicate(int[] nums) {
+        Map<Integer, Integer> map = new HashMap();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!map.containsKey(nums[i])) {
+                map.put(nums[i], 1);
+            } else {
+                int count = map.get(nums[i]);
+                map.put(nums[i], count + 1);
+            }
+        }
+        List<Integer> values = new ArrayList<>(map.values());
+        for (Integer temp : values) {
+            if (temp > 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 存在重复元素II
+     * <p>
+     * 方式1：两层for循环，时间复杂度较高
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        boolean flag = false;
+        Map<Integer, Integer> map = new HashMap();
+        for (int i = 0; i < nums.length; i++) {
+            if (!map.containsKey(nums[i])) {
+                map.put(nums[i], i);
+            } else {
+                int lastIndex = map.get(nums[i]);
+                if (Math.abs(i - lastIndex) <= k) {
+                    flag = true;
+                    break;
+                }
+                map.put(nums[i], i);
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 最大数
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public String largestNumber(int[] nums) {
+        int n = nums.length;
+        String numsToWord[] = new String[n];
+        for (int i = 0; i < n; i++) {
+            numsToWord[i] = String.valueOf(nums[i]);
+        }
+        //compareTo()方法比较的时候是按照ASCII码逐位比较的
+        //通过比较(a+b)和(b+a)的大小，就可以判断出a,b两个字符串谁应该在前面
+        //所以[3,30,34]排序后变为[34,3,30]
+        //[233，23333]排序后变为[23333，233]
+        Arrays.sort(numsToWord, (a, b) -> {
+            return (b + a).compareTo(a + b);
+        });
+        //如果排序后的第一个元素是0，那后面的元素肯定小于或等于0，则可直接返回0
+        if (numsToWord[0].equals("0")) {
+            return "0";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(numsToWord[i]);
+        }
+        return sb.toString();
+    }
+
+
+    /**
+     * 寻找旋转排序数组中的最小值
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public int findMin(int[] nums) {
+        int low = 0, high = nums.length - 1;
+        if (nums[high] > nums[low]) {
+            return nums[0];  //升序数组，数组完全单调，第一个数最小
+        }
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (nums[mid] < nums[0]) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return nums[high];
+    }
+
+
+    /**
+     * 轮转数组
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @param k
+     */
+
+    public void rotate(int[] nums, int k) {
+        if (nums == null || nums.length == 0 || k <= 0) {
+            return;
+        }
+        int N = nums.length;
+        k = k % N;
+        // 左边逆序, 右边逆序, 整体逆序
+        reverse(nums, 0, N - k - 1);
+        reverse(nums, N - k, N - 1);
+        reverse(nums, 0, N - 1);
+    }
+
+    private void reverse(int[] nums, int L, int R) {
+        while (L < R) {
+            int tmp = nums[L];
+            nums[L++] = nums[R];
+            nums[R--] = tmp;
+        }
+    }
+
+
+    /**
+     * 最大间距
+     *
+     * @param nums
+     * @return
+     */
+    public int maximumGap(int[] nums) {
+        if (nums.length < 2) {
+            return 0;
+        }
+        Arrays.sort(nums);
+
+        return 0;
+    }
+
+
+    /**
+     * 滑动窗口的最大值
+     * <p>
+     * 思路：双端队列 + 单调队列解决
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        Deque<Integer> queue = new ArrayDeque<>(); //双端队列
+        int[] res = new int[n - k + 1];
+        for (int i = 0, j = 0; i < n; i++) {
+            //判断队头是否在滑动窗口范围内
+            while (!queue.isEmpty() && i - k + 1 > queue.getFirst()) {
+                queue.pollFirst();
+            }
+            //维护单调递减队列
+            while (!queue.isEmpty() && nums[i] > nums[queue.getLast()]) {
+                queue.pollLast();
+            }
+            queue.offer(i);    //将当前元素插入队尾
+            //滑动窗口的元素达到了k个，才可以将其加入答案数组中
+            if (i - k + 1 >= 0) {
+                res[j++] = nums[queue.getFirst()];
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 长度最小的子数组
+     * <p>
+     * 完成情况：done
+     *
+     * @param target
+     * @param nums
+     * @return
+     */
+    public int minSubArrayLen(int target, int[] nums) {
+        LinkedList<Integer> queue = new LinkedList();
+        int curSum = 0;
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            curSum += nums[i];
+            queue.addLast(i);
+            while (curSum >= target && !queue.isEmpty()) {
+                res = Math.min(res, (i - queue.peekFirst()) + 1);
+                curSum -= nums[queue.pollFirst()];
+            }
+        }
+        if (res == Integer.MAX_VALUE) {
+            res = 0;
+        }
+        return res;
+    }
+
+
+    /**
+     * 多数元素
+     * <p>
+     * 思路：摩尔投票法
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @return
+     */
+    public int majorityElement(int[] nums) {
+        int targetNum = nums[0], count = 1;
+        for (int i = 1; i < nums.length; ++i) {
+            if (targetNum == nums[i]) {
+                ++count;
+            } else if (--count == 0) {
+                targetNum = nums[i];
+                count = 1;
+            }
+        }
+        return targetNum;
+    }
+
+
+    /**
+     * 两数之和 II - 输入有序数组
+     * <p>
+     * 完成情况：done
+     *
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        int[] res = new int[2];
+        int low = 0;
+        int high = numbers.length - 1;
+        while (low < high) {
+            int curSum = numbers[low] + numbers[high];
+            if (curSum > target) {
+                high--;
+            } else if (curSum < target) {
+                low++;
+            } else if (curSum == target) {
+                res[0] = low + 1;
+                res[1] = high + 1;
+                break;
+            }
+        }
+        return res;
+    }
+
 }
 
 
@@ -2301,6 +2883,95 @@ class PersonalProgress9 {
         }
         return dummy.next;
     }
+
+
+    /**
+     * 移除链表元素
+     * <p>
+     * 完成情况：done
+     *
+     * @param head
+     * @param val
+     * @return
+     */
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode pre = dummy;
+        ListNode cur = head;
+        ListNode next = null;
+        while (cur != null) {
+            next = cur.next;
+            if (cur.val == val) {
+                pre.next = cur.next;
+            } else {
+                pre = cur;
+            }
+            cur = next;
+        }
+        return dummy.next;
+    }
+
+
+    /**
+     * 删除链表中的节点
+     * <p>
+     * 完成情况：done
+     *
+     * @param node
+     */
+    public void deleteNode(ListNode node) {
+        if (node == null) {
+            return;
+        }
+        if (node.next == null) {
+            node = null;
+            return;
+        }
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+
+    /**
+     * 旋转链表
+     * <p>
+     * <p>
+     * 思路1：闭合成环，寻找位置断开环形成新的链表
+     * <p>
+     * 思路2：遍历两次链表，后n-k位置放到头部
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || k == 0 || head.next == null) {
+            return head;
+        }
+        int count = 1;
+        ListNode cur = head;
+        while (cur.next != null) {
+            count++;
+            cur = cur.next;
+        }
+        //计算需要右移多少步
+        int add = count - k % count;
+        if (add == count) {
+            return head;
+        }
+        //形成环
+        cur.next = head;
+        for (int i = 0; i < add; i++) {
+            cur = cur.next;
+        }
+        //断开环
+        ListNode newHead = cur.next;
+        cur.next = null;
+        return newHead;
+    }
 }
 
 
@@ -2376,6 +3047,32 @@ class PersonalProgress10 {
             }
         }
         return flag;
+    }
+
+
+    /**
+     * 搜索二维矩阵II
+     *
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean searchMatrix2(int[][] matrix, int target) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        int row = 0;
+        int col = matrix[0].length - 1;
+        while (row < matrix.length && col >= 0) {
+            if (target > matrix[row][col]) {
+                row++;
+            } else if (target < matrix[row][col]) {
+                col--;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -2888,6 +3585,33 @@ class PersonalProgress11 {
         return true;
     }
 
+
+    /**
+     * 重复的DNA序列
+     * <p>
+     * 思路：滑动窗口+map
+     * <p>
+     * 完成情况：done
+     *
+     * @param s
+     * @return
+     */
+    public List<String> findRepeatedDnaSequences(String s) {
+        List<String> ans = new ArrayList<>();
+        int n = s.length();
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i + 10 <= n; i++) {
+            String cur = s.substring(i, i + 10);
+            int cnt = map.getOrDefault(cur, 0);
+            if (cnt == 1) {
+                ans.add(cur);
+            }
+            map.put(cur, cnt + 1);
+        }
+        return ans;
+    }
+
+
 }
 
 /**
@@ -2980,42 +3704,7 @@ class PersonalProgress12 {
      * @return
      */
     public int numDecodings(String s) {
-        int[][] dp = new int[s.length()][s.length()];
-        for (int k = 0; k < s.length(); k++) {
-            if (s.charAt(k) != 0) {
-                dp[k][k] = 1;
-            }
-        }
-        for (int i = s.length() - 2; i >= 0; i--) {
-            for (int j = i + 1; j <= s.length() - 1; j++) {
-                //行数字
-                int rowNum = Integer.valueOf(Character.toString(s.charAt(i)));
-                int colNum = Integer.valueOf(Character.toString(s.charAt(j)));
-                //当前字符和前一个字符组成的数字
-                String twoString = s.substring(j - 1, j + 1);
-                int twoNums = Integer.valueOf(s.substring(j - 1, j + 1));
-                if (rowNum == 0) {
-                    dp[i][j] = 0;
-                    continue;
-                }
-                if (twoString.startsWith("0") && colNum == 0) {
-                    dp[i][j] = dp[i][j - 1];
-                    continue;
-                }
-                if (twoNums <= 26) {
-                    if (dp[i + 1][j] == dp[i][j - 1] && dp[i + 1][j] == 1) {
-                        dp[i][j] = dp[i + 1][j] + dp[i][j - 1];
-                    } else if (dp[i + 1][j] == dp[i][j - 1]) {
-                        dp[i][j] = dp[i + 1][j] + dp[i][j - 1] - 1;
-                    } else if (dp[i + 1][j] != dp[i][j - 1]) {
-                        dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
-                    }
-                } else if (twoNums > 26) {
-                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
-                }
-            }
-        }
-        return dp[0][s.length() - 1];
+        return 0;
     }
 
 
@@ -3053,6 +3742,35 @@ class PersonalProgress12 {
     private int getNextIndex(List<List<Integer>> triangle, int first, int firstIndex) {
         List<Integer> nextRowValue = triangle.get(firstIndex + 1);
         return nextRowValue.get(first) < nextRowValue.get(first + 1) ? first : first + 1;
+    }
+
+
+    /**
+     * 阶乘后的零
+     * <p>
+     * 思路：0来自什么？ 我们只需要判断每个累乘的数有多少个5的因子即可
+     * 1.因为含有5的因子每5个出现一次；
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @return
+     */
+    public int trailingZeroes(int n) {
+        int count = 0;
+        for (int i = 0; i <= n; i++) {
+            int temp = i;
+            while (temp > 0) {
+                if (temp % 5 == 0) {
+                    count++;
+                    temp = temp / 5;
+                } else {
+                    break;
+                }
+            }
+        }
+        return count;
     }
 
 
