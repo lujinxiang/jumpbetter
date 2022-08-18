@@ -15,10 +15,12 @@ algorithm/Solution18.class
 algorithm/Solution111.class
 algorithm/Solution35.class
 algorithm/Solution15.class
+algorithm/PersonalProgress4$PersonalProgress45.class
 algorithm/TreeRelatedProblem.class
 algorithm/Solution4.class
 algorithm/LeetCodeRelatedProblem.class
 algorithm/PersonalProgress11.class
+algorithm/PersonalProgress4$PersonalProgress42.class
 algorithm/SwordOfferRelatedProblem.class
 proxy/DynamicProxyStudy.class
 algorithm/ArrayAndMatrixProblem.class
@@ -43,6 +45,7 @@ proxy/AllNumber.class
 algorithm/PersonalProgress1.class
 algorithm/DivideAndConquerProblem.class
 algorithm/StringRelatedProblem$Record.class
+algorithm/PersonalProgress4$PersonalProgress44.class
 algorithm/RecursiveProblem.class
 algorithm/OtherRelatedProblem$Single.class
 algorithm/PersonalProgress8.class
@@ -51,6 +54,7 @@ algorithm/PersonalProgress9.class
 common/DoubleNode.class
 leetcode/huishu/HuiShu.class
 algorithm/Solution19.class
+algorithm/PersonalProgress4$PersonalProgress43.class
 common/TreeNode.class
 algorithm/PersonalProgress12.class
 algorithm/OtherRelatedProblem$LRU.class
@@ -83,6 +87,7 @@ algorithm/Solution34.class
 algorithm/Solution112.class
 algorithm/Solution.class
 algorithm/Solution11.class
+algorithm/PersonalProgress4$PersonalProgress41.class
 common/RandomNode.class
 algorithm/PersonalProgress13.class
 algorithm/Solution51.class
