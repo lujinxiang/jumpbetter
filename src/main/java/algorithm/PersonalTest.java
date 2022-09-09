@@ -171,18 +171,19 @@ public class PersonalTest {
         arr.add(list4);
         progress12.minimumTotal(arr);*/
 
-       /* PersonalProgress8 progress8 = new PersonalProgress8();
-        int[] arr = new int[]{0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
-        progress8.removeDuplicates3(arr);*/
+        PersonalProgress8 progress8 = new PersonalProgress8();
+        int[] arr = new int[]{2, 1};
+        int kthLargest = progress8.findKthLargest(arr, 1);
+        System.out.print(kthLargest);
 
 
-        PersonalProgress9 progress9 = new PersonalProgress9();
+/*        PersonalProgress9 progress9 = new PersonalProgress9();
         ListNode root = new ListNode(1);
         root.next = new ListNode(2);
         root.next.next = new ListNode(3);
         root.next.next.next = new ListNode(4);
         root.next.next.next.next = new ListNode(5);
-        progress9.reverseBetween(root, 2, 4);
+        progress9.reverseBetween(root, 2, 4);*/
 
 /*        PersonalProgress4.PersonalProgress42 personalProgress42 = new PersonalProgress4.PersonalProgress42();
         TreeNode root = new TreeNode(1);
@@ -957,6 +958,222 @@ class PersonalProgress2 {
  */
 class PersonalProgress3 {
 
+
+    /**
+     * 不同的子序列
+     * <p>
+     * dp[i][j]:以i-1结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j];
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public int numDistinct(String s, String t) {
+        int[][] dp = new int[s.length() + 1][t.length() + 1];
+        for (int i = 0; i < s.length(); i++) {
+            dp[i][0] = 1;
+        }
+        for (int j = 1; j < t.length(); j++) {
+            dp[0][j] = 0;
+        }
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= t.length(); j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[s.length()][t.length()];
+    }
+
+    /**
+     * 目标和
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+
+        return 0;
+    }
+
+
+    /**
+     * 打家劫舍
+     * <p>
+     * dp[i]的含义:考虑下标i(包括下标i)以内的房屋，最多可以偷窃的金额为dp[i];
+     * dp[i]的公式：dp[i]=Math.max(dp[i-2]+nums[i],dp[i-1]);
+     * <p>
+     * <p>
+     * 完成情况:done
+     *
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        return dp[nums.length - 1];
+    }
+
+
+    /**
+     * 打家劫舍II
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public int rob2(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+        if (nums.length == 1) {
+            return nums[0];
+        }
+        //case1:包含头，不包含尾部
+        int res1 = robRange(nums, 0, nums.length - 2);
+        //case2:包含尾部，不包含头
+        int res2 = robRange(nums, 1, nums.length - 1);
+        return Math.max(res1, res2);
+    }
+
+    //逻辑就是打家劫舍的逻辑
+    private int robRange(int[] nums, int start, int end) {
+        if (start == end) {
+            return nums[start];
+        }
+        int[] dp = new int[nums.length];
+        dp[start] = nums[start];
+        dp[start + 1] = Math.max(nums[start], nums[start + 1]);
+        for (int i = start + 2; i <= end; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        return dp[end];
+    }
+
+
+    /**
+     * 打家劫舍III 树形结构
+     *
+     * @param root
+     * @return
+     */
+    public int rob(TreeNode root) {
+
+
+        return 0;
+    }
+
+
+    /**
+     * 完全平方数
+     * <p>
+     * dp[i]的含义:和为i的完全平方数的最少数量为dp[i];
+     * dp[i]的公式：dp[i] = Math.min(dp[i - j * j] + 1, dp[i]);
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @return
+     */
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            int minn = Integer.MAX_VALUE;
+            for (int j = 1; j * j <= i; j++) {
+                minn = Math.min(minn, dp[i - j * j]);
+            }
+            dp[i] = minn + 1;
+        }
+        return dp[n];
+    }
+
+
+    /**
+     * 分割等和子集
+     * <p>
+     * 思路：转换成0-1背包问题；
+     * <p>
+     * 背包容量：sum/2;
+     * 背包物品：集合中的元素;
+     * 背包价值：元素的数值;
+     * <p>
+     * 备注：
+     * 1.背包需要正好装满;
+     * 2.背包中的每一个元素不可重复放入;
+     * <p>
+     * dp[i]:表示背包容量为i时，最大可以凑成i的子集总和为dp[i];
+     * dp[j]= Math.max(dp[j],dp[j-nums[i]+nums[i]);
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+        }
+        if (sum % 2 == 1) {
+            return false;
+        }
+        int[] dp = new int[20000];
+        int target = sum / 2;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = target; j >= nums[i]; j--) {
+                dp[j] = Math.max(dp[j], dp[j - nums[i]] + nums[i]);
+            }
+        }
+        if (dp[target] == target) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 整数拆分
+     * <p>
+     * dp[i]的含义: 分拆数字i,可以得到的最大乘积为dp[i];
+     * dp[i]的推理：dp[i]=Math.max(dp[i],(i-j)*j,dp[i-j]*j);
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @return
+     */
+    public int integerBreak(int n) {
+        int[] dp = new int[n + 1];
+        dp[2] = 1;
+        for (int i = 3; i <= n; i++) {
+            for (int j = 1; j < i - 1; j++) {
+                dp[i] = Math.max(dp[i], Math.max((i - j) * j, dp[i - j] * j));
+            }
+        }
+        return dp[n];
+    }
+
+
     /**
      * 编辑距离
      * <p>
@@ -1217,13 +1434,31 @@ class PersonalProgress3 {
      * 不同路径II
      * <p>
      * 带着障碍物的不同路径
+     * <p>
+     * 完成情况：done
      *
      * @param obstacleGrid
      * @return
      */
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-
-        return 0;
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        for (int i = 0; i < m && obstacleGrid[i][0] == 0; i++) {
+            dp[i][0] = 1;
+        }
+        for (int j = 0; j < n && obstacleGrid[0][j] == 0; j++) {
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) {
+                    continue;
+                }
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
     }
 
 
@@ -1231,12 +1466,40 @@ class PersonalProgress3 {
      * 买卖股票的最佳时机
      * <p>
      * dp[i][0]:第i天持有股票所得最多现金；
-     * dp[i][i]:第i天不持有股票所得最多现金；
+     * <p>
+     * dp[i][0]=Math.max(dp[i-1][0],-price[i])
+     * <p>
+     * dp[i][1]:第i天不持有股票所得最多现金；
+     * dp[i][1]=Math.max(dp[i-1][1],dp[i-1][0]+prices[i])
+     * <p>
+     * 完成情况：done
      *
      * @param prices
      * @return
      */
     public int maxProfit(int[] prices) {
+        int len = prices.length;
+        if (len == 0) {
+            return 0;
+        }
+        int[][] dp = new int[prices.length][2];
+        dp[0][0] -= prices[0];
+        dp[0][1] = 0;
+        for (int i = 1; i < len; i++) {
+            dp[i][0] = Math.max(dp[i - 1][0], -prices[i]);
+            dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i]);
+        }
+        return dp[len - 1][1];
+    }
+
+
+    /**
+     * 买卖股票的最佳时机II
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit2(int[] prices) {
 
         return 0;
     }
@@ -1248,6 +1511,66 @@ class PersonalProgress3 {
  * 二叉树、二叉搜索树相关
  */
 class PersonalProgress4 {
+
+
+    /**
+     * 不同的二叉搜索树
+     * <p>
+     * 方式1：暴力递归
+     * 方式2：动态规划
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @return
+     */
+    public int numTrees(int n) {
+        int res = dfs(n);
+        return res;
+    }
+
+    private int dfs(int n) {
+        //1.递归跳出条件
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+        int count = 0;
+        for (int i = 1; i <= n; i++) {
+            //当用i这个节点当做根节点时
+            //左边有多少种子树
+            int leftNum = dfs(i - 1);
+            //右边有多少种子树
+            int rightNum = dfs(n - i);
+            count += leftNum * rightNum;
+        }
+        return count;
+    }
+
+
+    /**
+     * 方式2：动态规划解决
+     * <p>
+     * dp[i]的含义：1-i为节点组成的二叉搜索树的个数为dp[i];
+     * dp[i]的公式：dp[i]+=dp[j-1]*dp[i-j]
+     * j-1:j为头节点左子树节点数量
+     * i-j:j为头节点右子树节点数量
+     * <p>
+     * 完成情况：done
+     *
+     * @param n
+     * @return
+     */
+    public int numTrees2(int n) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= i; j++) {
+                dp[i] += dp[j - 1] * dp[i - j];
+            }
+        }
+        return dp[n];
+    }
+
 
     /**
      * 二叉搜索树的最近公共祖先
@@ -2314,11 +2637,55 @@ class PersonalProgress7 {
 }
 
 
-/** 
+/**
  * 数组相关
  */
 class PersonalProgress8 {
 
+
+    /**
+     * 数组中的第k大个最大元素
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findKthLargest(int[] nums, int k) {
+        int pivot = 0;
+        int low = 0;
+        int high = nums.length - 1;
+        pivot = findPivot(nums, low, high);
+        if (pivot == nums.length - k) {
+            pivot = nums[pivot];
+        } else if (pivot < nums.length - k) {
+            pivot = findPivot(nums, pivot + 1, high);
+        } else if (pivot > nums.length - k) {
+            pivot = findPivot(nums, low, pivot - 1);
+        }
+        return nums[pivot];
+    }
+
+    private int findPivot(int[] nums, int low, int high) {
+        int selectedNum = nums[low];
+        int i = low;
+        int j = high;
+        while (i < j) {
+            while (i < j && selectedNum <= nums[j]) {
+                j--;
+            }
+            while (i < j && selectedNum >= nums[i]) {
+                i++;
+            }
+            if (i < j) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+        nums[low] = nums[i];
+        nums[i] = selectedNum;
+        return i;
+    }
 
     /**
      * 除自身以外数组的乘积
@@ -5576,8 +5943,6 @@ class PersonalProgress14 {
             }
         }
     }
-
-
 }
 
 

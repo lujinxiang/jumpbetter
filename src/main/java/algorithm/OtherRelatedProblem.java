@@ -24,9 +24,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class OtherRelatedProblem {
 
     public static void main(String[] args) {
-        PrintThread printThread = new PrintThread();
-        printThread.printThreadNumber();
+        HashMap a = new HashMap();
+        HashMap b = new HashMap();
+        System.out.print(a.equals(b));
     }
+
+
 
     /**
      * 单例设计模式
