@@ -958,6 +958,119 @@ class PersonalProgress2 {
  */
 class PersonalProgress3 {
 
+    /**
+     * 最长连续递增序列
+     * <p>
+     * dp[i]:以下标i为结尾的数组的连续递增的子序列长度为dp[i];
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public int findLengthOfLCIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        if (nums.length == 0) {
+            return 0;
+        }
+        int res = 1;
+        dp[0] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = 1;
+            if (nums[i] > nums[i - 1]) {
+                dp[i] = dp[i - 1] + 1;
+            }
+            res = Math.max(dp[i], res);
+        }
+        return res;
+    }
+
+
+    /**
+     * 最长重复子数组
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int findLength(int[] nums1, int[] nums2) {
+        int[][] dp = new int[nums1.length + 1][nums2.length + 1];
+        int res = Integer.MIN_VALUE;
+        for (int i = 1; i <= nums1.length; i++) {
+            for (int j = 1; j <= nums2.length; j++) {
+                if (nums1[i - 1] == nums2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+                res = Math.max(res, dp[i][j]);
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 判断子序列:判断s是否是t的子序列；
+     * <p>
+     * dp[i][j]:以下标i-1结尾的字符串s和以下标j-1结尾的字符串t,相同子序列的长度为dp[i][j];
+     * <p>
+     * 完成情况：done
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isSubsequence(String s, String t) {
+        int[][] dp = new int[s.length() + 1][t.length() + 1];
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 1; j <= t.length(); j++) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        if (dp[s.length()][t.length()] == s.length()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 两个字符串的删除操作
+     * <p>
+     * dp[i][j]:以i-1结尾的字符串word1和以j-1位结尾的字符串word2,想要达到相等所需要删除元素的最少次数；
+     * dp[i][j]=Math.min(dp[i-1][j-1]+2,Math.min(dp[i-1][j]+1,dp[i][j-1]+1));
+     * <p>
+     * 完成情况：done
+     *
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int minDistance2(String word1, String word2) {
+        int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+        for (int i = 0; i <= word1.length(); i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= word2.length(); j++) {
+            dp[0][j] = j;
+        }
+        for (int i = 1; i <= word1.length(); i++) {
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j - 1] + 2, Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1));
+                }
+            }
+        }
+        return dp[word1.length()][word2.length()];
+    }
+
 
     /**
      * 不同的子序列
