@@ -170,11 +170,11 @@ public class PersonalTest {
         arr.add(list3);
         arr.add(list4);
         progress12.minimumTotal(arr);*/
-
+/*
         PersonalProgress8 progress8 = new PersonalProgress8();
         int[] arr = new int[]{2, 1};
         int kthLargest = progress8.findKthLargest(arr, 1);
-        System.out.print(kthLargest);
+        System.out.print(kthLargest);*/
 
 
 /*        PersonalProgress9 progress9 = new PersonalProgress9();
@@ -194,6 +194,12 @@ public class PersonalTest {
         root.right = new TreeNode(3);
         int res = personalProgress42.getMinimumDifference(root);
         System.out.print(res);*/
+
+        PersonalProgress15 progress15 = new PersonalProgress15();
+        int[] goal = new int[]{10, 9, 8, 7};
+        int[] size = new int[]{5, 6, 7, 8};
+        int contentChildren = progress15.findContentChildren(goal, size);
+        System.out.print(contentChildren);
     }
 
     /**
@@ -6056,6 +6062,131 @@ class PersonalProgress14 {
             }
         }
     }
+}
+
+/**
+ * 贪心算法
+ */
+class PersonalProgress15 {
+
+    /**
+     * 分发饼干
+     * <p>
+     * 思路：大饼干优先喂饱胃口大的，小饼干优先喂饱胃口小的；
+     * <p>
+     * <p>
+     * 完成情况：done
+     *
+     * @param g: 胃口大小
+     * @param s： size(饼干尺寸)
+     * @return
+     */
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int index = 0;
+        int goal = 0;
+        int res = 0;
+        while (index <= s.length - 1 && goal <= g.length - 1) {
+            if (g[goal] <= s[index]) {
+                res++;
+                goal++;
+            }
+            index++;
+        }
+        return res;
+    }
+
+
+    /**
+     * 跳跃游戏
+     * <p>
+     * 思路：
+     * 1.局部最优解：每次取最大跳跃步数（最大覆盖范围）
+     * 2.整体最优解：最后得到整体最大覆盖范围，看是否能够达到终点；
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        if (nums.length == 1) {
+            return true;
+        }
+        boolean flag = false;
+        //代表当前最大的覆盖范围；
+        int cover = 0;
+        for (int i = 0; i <= cover; i++) {
+            cover = Math.max(cover, i + nums[i]);
+            if (cover >= nums.length - 1) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * 跳跃游戏II
+     *
+     * @param nums
+     * @return
+     */
+    public int jump(int[] nums) {
+
+        return 0;
+    }
+
+
+    /**
+     * 柠檬水找零
+     * <p>
+     * 完成情况：done
+     *
+     * @param bills
+     * @return
+     */
+    public boolean lemonadeChange(int[] bills) {
+        int five = 0, ten = 0, twenty = 0;
+        for (int bill : bills) {
+            // 情况⼀
+            if (bill == 5) {
+                five++;
+            }
+            // 情况⼆
+            if (bill == 10) {
+                if (five <= 0) {
+                    return false;
+                }
+                ten++;
+                five--;
+            }
+            // 情况三
+            if (bill == 20) {
+                // 优先消耗10美元，因为5美元的找零⽤处更⼤，能多留着就多留着
+                if (five > 0 && ten > 0) {
+                    five--;
+                    ten--;
+                    twenty++; // 其实这⾏代码可以删了，因为记录20已经没有意义了，不会⽤20来找零
+                } else if (five >= 3) {
+                    five -= 3;
+                    twenty++; // 同理，这⾏代码也可以删了
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+
+
 }
 
 
