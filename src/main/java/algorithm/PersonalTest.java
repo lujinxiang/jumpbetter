@@ -17,6 +17,11 @@ import java.util.*;
 public class PersonalTest {
 
     public static void main(String[] args) {
+        PersonalProgress14 progress14 = new PersonalProgress14();
+        List<String> res = progress14.addOperators("123", 6);
+        System.out.print(res);
+
+
 /*        PersonalProgress4 progress = new PersonalProgress4();
         TreeNode root = new TreeNode(2);
         TreeNode left = new TreeNode(4);
@@ -195,11 +200,40 @@ public class PersonalTest {
         int res = personalProgress42.getMinimumDifference(root);
         System.out.print(res);*/
 
-        PersonalProgress15 progress15 = new PersonalProgress15();
+/*        PersonalProgress15 progress15 = new PersonalProgress15();
         int[] goal = new int[]{10, 9, 8, 7};
         int[] size = new int[]{5, 6, 7, 8};
         int contentChildren = progress15.findContentChildren(goal, size);
-        System.out.print(contentChildren);
+        System.out.print(contentChildren);*/
+
+/*        PersonalProgress4 progress4 = new PersonalProgress4();
+        TreeNode root1 = new TreeNode(1);
+        root1.left = new TreeNode(2);
+        root1.left.left = new TreeNode(3);
+        TreeNode root2 = new TreeNode(2);
+        root2.left = new TreeNode(4);
+        root2.right = new TreeNode(5);
+        TreeNode root = progress4.mergeTrees(root1, root2);*/
+
+   /*     PersonalProgress1 progress1=new PersonalProgress1();
+        List<List<Integer>> combine = progress1.combine(4, 2);
+        System.out.print(combine);*/
+/*        PersonalProgress8 progress8 = new PersonalProgress8();
+        int[] nums = new int[]{1, 2, 3};
+        List<List<Integer>> permute = progress8.permute(nums);
+        System.out.print(permute);*/
+/*
+        PersonalProgress16.PersonalProgress16_1 progress16_1 = new PersonalProgress16.PersonalProgress16_1();
+        TreeNode root = TreeNode.getTree();
+        TreeNode target = root.left.left;
+        progress16_1.distanceK(root, target, 2);*/
+
+        /*PersonalProgress17 progress17 = new PersonalProgress17();
+        progress17.wordBreak("aab", Arrays.asList("a", "aa"));*/
+
+/*        PersonalProgress17.PersonalProgress17_1 progress17_1 = new PersonalProgress17.PersonalProgress17_1();
+        int[] nums = new int[]{1, 1, 1, 1, 1};
+        progress17_1.findTargetSumWays(nums, 3);*/
     }
 
     /**
@@ -551,9 +585,37 @@ class PersonalProgress {
  */
 class PersonalProgress1 {
 
+    /**
+     * 子集
+     * <p>
+     * 完成情况：done
+     */
+    class PersonalProgress1_111 {
+        public List<List<Integer>> subsets(int[] arr) {
+            List<List<Integer>> res = new ArrayList<>();
+            List<Integer> path = new LinkedList<>();
+            dfs(0, arr, res, (LinkedList<Integer>) path);
+            return res;
+        }
+
+        private void dfs(int startIndex, int[] arr, List<List<Integer>> res, LinkedList<Integer> path) {
+            res.add(new ArrayList<>(path));
+            if (startIndex >= arr.length) {
+                return;
+            }
+            for (int i = startIndex; i < arr.length; i++) {
+                path.addLast(arr[i]);
+                dfs(i + 1, arr, res, path);
+                path.removeLast();
+            }
+        }
+
+    }
 
     /**
      * 子集II
+     * <p>
+     * desc:需要对子集结果集进行去重
      * <p>
      * 完成情况：done
      */
@@ -1631,6 +1693,104 @@ class PersonalProgress3 {
  */
 class PersonalProgress4 {
 
+    /**
+     * 删除二叉搜索树中的节点
+     * <p>
+     * 完成情况:done
+     *
+     * @param root
+     * @param key
+     * @return
+     */
+    public TreeNode deleteNode(TreeNode root, int key) {
+        //1.找到节点
+        //2.删除节点 记录当前节点的前驱节点
+        //3.调整节点 记录当前节点的后继节点
+        if (root == null) {
+            return null;
+        }
+        if (root.val == key) {
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                TreeNode cur = root.right;
+                while (cur.left != null) {
+                    cur = cur.left;
+                }
+                cur.left = root.left;
+                root = root.right;
+                return root;
+            }
+        }
+        if (root.val > key) {
+            root.left = deleteNode(root.left, key);
+        }
+        if (root.val < key) {
+            root.right = deleteNode(root.right, key);
+        }
+        return root;
+    }
+
+    /**
+     * 把二叉搜索树转换为累加树
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode convertBST(TreeNode root) {
+
+
+        return null;
+    }
+
+    /**
+     * 二叉搜索树中的搜索
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode searchBST(TreeNode root, int val) {
+        if (root == null || root.val == val) {
+            return root;
+        }
+        if (root.val > val) {
+            return searchBST(root.left, val);
+        }
+        if (root.val < val) {
+            return searchBST(root.right, val);
+        }
+        return null;
+    }
+
+
+    /**
+     * 合并二叉树
+     * <p>
+     * 完成情况：done
+     *
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if (root1 == null) {
+            return root2;
+        }
+        if (root2 == null) {
+            return root1;
+        }
+        TreeNode root = new TreeNode(0);
+        root.val = root1.val + root2.val;
+        root.left = mergeTrees(root1.left, root2.left);
+        root.right = mergeTrees(root1.right, root2.right);
+        return root;
+    }
+
 
     /**
      * 不同的二叉搜索树
@@ -2285,6 +2445,38 @@ class PersonalProgress4 {
         return outSide && inSide;
     }
 
+    /**
+     * 二叉树的所有路径
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+
+    static class Solution4_1 {
+        public List<String> binaryTreePaths(TreeNode root) {
+            List<String> res = new ArrayList<>();
+            String path = "";
+            dfs(root, path + root.val, res);
+            return res;
+        }
+
+        private void dfs(TreeNode root, String path, List<String> res) {
+            if (root.left == null && root.right == null) {
+                res.add(path);
+                return;
+            }
+
+            if (root.left != null) {
+                dfs(root.left, path + "->" + root.left.val, res);
+            }
+
+            if (root.right != null) {
+                dfs(root.right, path + "->" + root.right.val, res);
+            }
+        }
+    }
 
     /**
      * 左叶子之和
@@ -3195,6 +3387,7 @@ class PersonalProgress8 {
     private void dfs(int[] nums, LinkedList<Integer> path, boolean[] used, List<List<Integer>> res) {
         if (nums.length == path.size()) {
             res.add(new ArrayList<>(path));
+            return;
         }
         for (int i = 0; i < nums.length; i++) {
             if (used[i]) {
@@ -3210,6 +3403,10 @@ class PersonalProgress8 {
 
     /**
      * 全排列II
+     * <p>
+     * desc:按任意顺序返回所有不重复的全排列
+     * <p>
+     * tips:去重
      * <p>
      * 完成情况：done
      *
@@ -4280,18 +4477,67 @@ class PersonalProgress9 {
         return head;
     }
 
+    /**
+     * 删除排序链表中的重复元素II
+     * <p>
+     * 完成情况：done
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates2_1(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur = head;
+        ListNode pre = dummy;
+        while (cur != null) {
+            while (cur.next != null && cur.next.val == cur.val) {
+                cur = cur.next;
+            }
+            //pre.next==cur,说明没有重复的节点
+            if (pre.next == cur) {
+                pre = pre.next;
+            } else {
+                pre.next = cur.next;
+            }
+            cur = cur.next;
+        }
+        return dummy.next;
+    }
+
 
     /**
-     * 分隔链表：未完成
+     * 分隔链表
+     * <p>
+     * 完成情况：done
      *
      * @param head
      * @param x
      * @return
      */
     public ListNode partition(ListNode head, int x) {
+        //四个指针，分大小链表的头和尾
+        ListNode smallHead = new ListNode(0);
+        ListNode smallTail = smallHead;
+        ListNode bigHead = new ListNode(0);
+        ListNode bigTail = bigHead;
 
-
-        return null;
+        while (head != null) {
+            if (head.val < x) {
+                //如果当前节点小于x,则把当前节点挂到小链表的后面；
+                smallTail = smallTail.next = head;
+            } else {
+                bigTail = bigTail.next = head;
+            }
+            head = head.next;
+        }
+        //最后把大小链表拼接在一起
+        smallTail.next = bigHead.next;
+        bigTail.next = null;
+        return smallHead.next;
     }
 
 
@@ -5970,6 +6216,115 @@ class PersonalProgress14 {
 
 
     /**
+     * 火柴拼正方形
+     * <p>
+     * 完成情况：done
+     *
+     * @param matchsticks
+     * @return
+     */
+    public boolean makesquare(int[] matchsticks) {
+        int total = 0;
+        for (int num : matchsticks) {
+            total += num;
+        }
+        if (total == 0 || (total & 3) != 0) {
+            return false;
+        }
+        Arrays.sort(matchsticks);
+        return backtrack(matchsticks, total >> 2, matchsticks.length - 1, new int[4]);
+    }
+
+    /**
+     * @param nums:数组
+     * @param target：边长
+     * @param index：遍历开始的位置
+     * @param arr：长度为4的arr数组
+     * @return
+     */
+    private boolean backtrack(int[] nums, int target, int index, int[] arr) {
+        if (index == -1) {
+            if (arr[0] == arr[1] && arr[1] == arr[2] && arr[2] == arr[3]) {
+                return true;
+            }
+            return false;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] + nums[index] > target || (i > 0 && arr[i] == arr[i - 1])) {
+                continue;
+            }
+            arr[i] += nums[index];
+            if (backtrack(nums, target, index - 1, arr)) {
+                return true;
+            }
+            arr[i] -= nums[index];
+        }
+        return false;
+    }
+
+
+    /**
+     * 给表达式添加运算符
+     * <p>
+     * 完成情况：done
+     *
+     * @param num
+     * @param target
+     * @return
+     */
+    public List<String> addOperators(String num, int target) {
+        List<String> res = new ArrayList<>();
+        dfs(res, num, target, 0, 0, 0, "");
+        return res;
+    }
+
+    /**
+     * @param res:返回的结果
+     * @param num：字符串num
+     * @param target:目标值target
+     * @param index:访问到字符串的第几个字符
+     * @param preNum：前面的连续乘积
+     * @param sum：表达式前面计算得到的和
+     * @param path：算法表达式，可以看做n叉树的路径
+     */
+    private void dfs(List<String> res, String num, int target, int index, long preNum, long sum, String path) {
+        if (index >= num.length()) {
+            if (sum == target) {
+                res.add(path);
+            }
+            return;
+        }
+        for (int i = index; i < num.length(); i++) {
+            if (i != index && num.charAt(index) == '0') {
+                break;
+            }
+            long number = Long.valueOf(num.substring(index, i + 1));
+            if (index == 0) {
+                //因为第一个数字前面没有符号，所以单独处理；
+                dfs(res, num, target, i + 1, number, number, "" + number);
+            } else {
+                dfs(res, num, target, i + 1, number, sum + number, path + "+" + number);
+                dfs(res, num, target, i + 1, -number, sum - number, path + "-" + number);
+                dfs(res, num, target, i + 1, preNum * number,
+                        sum + preNum * number - preNum, path + "*" + number);
+            }
+        }
+
+    }
+
+    /**
+     * 重新安排行程
+     *
+     * @param tickets
+     * @return
+     */
+    public List<String> findItinerary(List<List<String>> tickets) {
+
+        return null;
+    }
+
+
+    /**
      * 单词拆分
      * <p>
      * 完成情况：done
@@ -6183,11 +6538,437 @@ class PersonalProgress15 {
         }
         return true;
     }
+}
+
+/**
+ * BFS相关的问题
+ */
+class PersonalProgress16 {
 
 
+    /**
+     * 层数最深叶子节点的和
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public int deepestLeavesSum(TreeNode root) {
+        int res = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            int levelCount = queue.size();
+            //每次都会把res置为0，到最后一层的时候没有下层的res来覆盖
+            res = 0;
+            for (int i = 0; i < levelCount; i++) {
+                TreeNode cur = queue.poll();
+                res += cur.val;
+                if (cur.left != null) {
+                    queue.offer(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.offer(cur.right);
+                }
+            }
+        }
+        return res;
+    }
 
+
+    /**
+     * 机器人的运动范围
+     * <p>
+     * 完成情况：done
+     *
+     * @param m
+     * @param n
+     * @param k
+     * @return
+     */
+    public int movingCount(int m, int n, int k) {
+        //临时变量visited记录格子是否被访问过
+        boolean[][] visited = new boolean[m][n];
+        int res = 0;
+        //创建一个队列，保存的是访问到的格子坐标，是个二维数组
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{0, 0});
+        while (!queue.isEmpty()) {
+            int[] x = queue.poll();
+            int i = x[0], j = x[1];
+            //i >= m || j >= n是边界条件的判断，k < sum(i, j)判断当前格子坐标是否
+            // 满足条件，visited[i][j]判断这个格子是否被访问过
+            if (i >= m || j >= n || k < sum(i, j) || visited[i][j]) {
+                continue;
+            }
+            //标注这个格子被访问过
+            visited[i][j] = true;
+            res++;
+            //把当前格子下边格子的坐标加入到队列中
+            queue.add(new int[]{i + 1, j});
+            //把当前格子右边格子的坐标加入到队列中
+            queue.add(new int[]{i, j + 1});
+        }
+        return res;
+    }
+
+    //计算两个坐标数字的和
+    private int sum(int i, int j) {
+        int sum = 0;
+        while (i != 0) {
+            sum += i % 10;
+            i /= 10;
+        }
+        while (j != 0) {
+            sum += j % 10;
+            j /= 10;
+        }
+        return sum;
+    }
+
+
+    /**
+     * 二叉树最大宽度
+     * <p>
+     * idea:
+     * 1.对节点进行编号
+     * 2.二叉树的头节点编号为index,左孩子节点编号为index*2,右孩子节点编号为index*2+1;
+     * 3.利用每一层节点的宽度=最大编号-最小编号+1；
+     * <p>
+     * 完成情况：done
+     *
+     * @param root
+     * @return
+     */
+    public int widthOfBinaryTree(TreeNode root) {
+        int res = 1;
+        List<Pair<TreeNode, Integer>> queue = new ArrayList<>();
+        queue.add(new Pair(root, 1));
+        while (!queue.isEmpty()) {
+            List<Pair<TreeNode, Integer>> tmp = new ArrayList<>();
+            for (Pair<TreeNode, Integer> pair : queue) {
+                TreeNode cur = pair.getKey();
+                int index = pair.getValue();
+                if (cur.left != null) {
+                    tmp.add(new Pair(cur.left, index * 2));
+                }
+                if (cur.right != null) {
+                    tmp.add(new Pair(cur.right, index * 2 + 1));
+                }
+            }
+            res = Math.max(res, queue.get(queue.size() - 1).getValue() - queue.get(0).getValue() + 1);
+            queue = tmp;
+        }
+        return res;
+    }
+
+
+    /**
+     * 二叉树中所有距离为k的结点
+     * <p>
+     * idea:
+     * 1.把树想象成一张图
+     * 2.从target出发有三个方向（左、右、父节点）
+     * <p>
+     * tips:
+     * 1.用HashMap记录父节点
+     * 2.用set用于宽度优先遍历的去重
+     * <p>
+     * <p>
+     * 完成情况：done
+     */
+    static class PersonalProgress16_1 {
+
+        private Map<TreeNode, TreeNode> parents = new HashMap<>();
+        private List<Integer> res = new ArrayList<>();
+
+        public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+            if (k == 0) {
+                res.add(target.val);
+                return res;
+            }
+            findParents(root);
+            //宽度优先遍历队列
+            Queue<TreeNode> queue = new LinkedList<>();
+            //防止重复遍历的visit集合
+            Set<TreeNode> visit = new HashSet<>();
+            queue.offer(target);
+            visit.add(target);
+            int i = 0;
+            while (i != k) {
+                i++;
+                int size = queue.size();
+                for (int j = 0; j < size; j++) {
+                    TreeNode cur = queue.poll();
+                    //左孩子方向
+                    if (cur.left != null && !visit.contains(cur.left)) {
+                        queue.offer(cur.left);
+                        visit.add(cur.left);
+                    }
+                    //右孩子方向
+                    if (cur.right != null && !visit.contains(cur.right)) {
+                        queue.offer(cur.right);
+                        visit.add(cur.right);
+                    }
+                    //父节点方向
+                    if (parents.get(cur) != null && !visit.contains(parents.get(cur))) {
+                        queue.offer(parents.get(cur));
+                        visit.add(parents.get(cur));
+                    }
+                }
+            }
+            for (TreeNode temp : queue) {
+                res.add(temp.val);
+            }
+            return res;
+        }
+
+        private void findParents(TreeNode root) {
+            if (root.left != null) {
+                parents.put(root.left, root);
+                findParents(root.left);
+            }
+            if (root.right != null) {
+                parents.put(root.right, root);
+                findParents(root.right);
+            }
+        }
+    }
 
 }
+
+
+/**
+ * DFS相关的问题
+ */
+class PersonalProgress17 {
+
+
+    /**
+     * 岛屿数量
+     * <p>
+     * 完成情况：done
+     * <p>
+     * idea:
+     * 1. 多个相邻的1组成的地域只是一个岛屿；
+     * 2. 不是相邻的多个1是代表多个岛屿；
+     * 3. 可以将遍历到1的位置设置为0，避免重复的遍历；
+     *
+     * @param grid
+     * @return
+     */
+    public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+        int res = 0;
+        //对二维数组中的每个点进行这样的遍历，以任意一个点为起点进行这样的操作；
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    res++;
+                    dfs(grid, i, j);
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 1.上下左右四个方向进行遍历；
+     * 2.遍历过程中进行沉岛；
+     *
+     * @param grid
+     * @param i
+     * @param j
+     */
+    private void dfs(char[][] grid, int i, int j) {
+        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] == '0') {
+            return;
+        }
+        grid[i][j] = '0';
+        dfs(grid, i - 1, j);
+        dfs(grid, i + 1, j);
+        dfs(grid, i, j - 1);
+        dfs(grid, i, j + 1);
+    }
+
+
+    static class PersonalProgress17_1 {
+        /**
+         * 目标和
+         * <p>
+         * 完成情况：done
+         * <p>
+         * idea:
+         * 1.每个元素两种选择"-"和"+"；
+         * 2.左子树为"-"，右子树为"+"
+         *
+         * @param nums
+         * @param target
+         * @return 返回可以组成目标和的总个数
+         */
+        int res = 0;
+
+        public int findTargetSumWays(int[] nums, int target) {
+            dfs(nums, target, 0, 0);
+            return res;
+        }
+
+        private void dfs(int[] nums, int target, int startIndex, int sum) {
+            if (startIndex == nums.length) {
+                if (target == sum) {
+                    res++;
+                }
+                return;
+            }
+            dfs(nums, target, startIndex + 1, sum - nums[startIndex]);
+            dfs(nums, target, startIndex + 1, sum + nums[startIndex]);
+        }
+    }
+
+
+    /**
+     * 单词拆分
+     * <p>
+     * 完成情况:done
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        return dfs(s, wordDict, 0, new HashSet<>());
+    }
+
+    /**
+     * @param s
+     * @param wordDict
+     * @param startIndex:表示从字符串s的哪个位置开始
+     * @param dupSet:去重的集合
+     * @return
+     */
+    private boolean dfs(String s, List<String> wordDict, int startIndex, HashSet<Integer> dupSet) {
+        if (startIndex == s.length()) {
+            return true;
+        }
+        //开始拆分字符串s
+        for (int i = startIndex + 1; i <= s.length(); i++) {
+            if (dupSet.contains(i)) {
+                continue;
+            }
+            if (wordDict.contains(s.substring(startIndex, i))) {
+                if (dfs(s, wordDict, i, dupSet)) {
+                    return true;
+                }
+                dupSet.add(i);
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 矩阵中的路径
+     * <p>
+     * 完成情况：done
+     * <p>
+     * idea:
+     * 1.check:判断以网格的(i,j)位置出发，能否搜索到单词word[k...]
+     * 1.1 如果board[i][j]!=s[k],当前字符不匹配，直接返回false；
+     * 1.2 如果当前已经访问到字符串的末尾，且对应字符依然匹配，此时直接返回true;
+     * 1.3 遍历当前位置的所有相邻位置，如果从某个相邻位置触发，能够搜索到子串word[k+1...],则返回true,否则返回false;
+     * <p>
+     * 2.对每个位置(i,j)都调用函数check进行检查，只要有一处返回true,则说明网格中能够找到相应的单词，否则说明找不到
+     *
+     * @param board
+     * @param word
+     * @return
+     */
+    public boolean exist(char[][] board, String word) {
+        int h = board.length, w = board[0].length;
+        boolean[][] visited = new boolean[h][w];
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                boolean flag = check(board, visited, i, j, word, 0);
+                if (flag) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean check(char[][] board, boolean[][] visited, int i, int j, String s, int k) {
+        if (board[i][j] != s.charAt(k)) {
+            return false;
+        } else if (k == s.length() - 1) {
+            return true;
+        }
+        visited[i][j] = true;
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        boolean result = false;
+        for (int[] dir : directions) {
+            int newi = i + dir[0], newj = j + dir[1];
+            if (newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length) {
+                if (!visited[newi][newj]) {
+                    boolean flag = check(board, visited, newi, newj, s, k + 1);
+                    if (flag) {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        visited[i][j] = false;
+        return result;
+    }
+
+    /**
+     * 机器人的运动范围
+     * <p>
+     * 完成情况:done
+     *
+     * @param m
+     * @param n
+     * @param k
+     * @return
+     */
+    public int movingCount(int m, int n, int k) {
+        //临时变量visited记录格子是否被访问过
+        boolean[][] visited = new boolean[m][n];
+        return dfs(0, 0, m, n, k, visited);
+    }
+
+    public int dfs(int i, int j, int m, int n, int k, boolean[][] visited) {
+        //i >= m || j >= n是边界条件的判断，k < sum(i, j)判断当前格子坐标是否
+        // 满足条件，visited[i][j]判断这个格子是否被访问过
+        if (i >= m || j >= n || k < sum(i, j) || visited[i][j]) {
+            return 0;
+        }
+        //标注这个格子被访问过
+        visited[i][j] = true;
+        //沿着当前格子的右边和下边继续访问
+        return 1 + dfs(i + 1, j, m, n, k, visited) + dfs(i, j + 1, m, n, k, visited);
+    }
+
+    //计算两个坐标数字的和
+    private int sum(int i, int j) {
+        int sum = 0;
+        while (i != 0) {
+            sum += i % 10;
+            i /= 10;
+        }
+        while (j != 0) {
+            sum += j % 10;
+            j /= 10;
+        }
+        return sum;
+    }
+
+}
+
 
 
 
