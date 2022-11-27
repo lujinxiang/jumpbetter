@@ -12,6 +12,7 @@ algorithm/PersonalProgress1$PersonalProgress1_11.class
 algorithm/PersonalProgress11$PersonalProgress11_1.class
 algorithm/TreeRelatedProblem$Record.class
 algorithm/SwordCode.class
+algorithm/DynamicRelatedProblem$Solution.class
 algorithm/Solution114.class
 algorithm/PersonalProgress1$PersonalProgress1_1.class
 proxy/StudentInvocationHandler.class
@@ -49,7 +50,6 @@ algorithm/Solution31.class
 algorithm/Solution13.class
 algorithm/Solution2.class
 algorithm/PersonalProgress1$PersonalProgress1_111.class
-leetcode/problem/ListNode.class
 algorithm/OtherRelatedProblem$PrintThread.class
 proxy/AllNumber.class
 algorithm/PersonalProgress1.class
@@ -64,7 +64,6 @@ algorithm/PersonalProgress8.class
 algorithm/StackAndQueueProblem$TwoStackQueue.class
 algorithm/PersonalProgress9.class
 common/DoubleNode.class
-leetcode/huishu/HuiShu.class
 algorithm/Solution19.class
 algorithm/PersonalProgress4$PersonalProgress43.class
 common/TreeNode.class
@@ -75,6 +74,7 @@ algorithm/Solution16.class
 springstudy/HelloController.class
 proxy/Person.class
 algorithm/Solution36.class
+leetcode/HappyCode.class
 algorithm/BfsRelatedProblem.class
 algorithm/OtherRelatedProblem$Resource.class
 algorithm/PersonalProgress15.class
@@ -101,6 +101,7 @@ algorithm/ArrayAndMatrixProblem$HeapNode.class
 algorithm/StackAndQueueProblem$MyStack1.class
 algorithm/Solution34.class
 algorithm/Solution112.class
+leetcode/ListNode.class
 algorithm/Solution.class
 algorithm/Solution11.class
 algorithm/PersonalProgress4$PersonalProgress41.class
@@ -108,17 +109,14 @@ algorithm/PersonalProgress17$PersonalProgress17_1.class
 common/RandomNode.class
 algorithm/PersonalProgress13.class
 algorithm/PersonalProgress14$PersonalProgress14_2.class
-algorithm/Solution51.class
 algorithm/BitCalculateProblem.class
-algorithm/PersonalTest.class
-leetcode/problem/HappyCode.class
 algorithm/Solution33.class
 algorithm/PersonalProgress5.class
 algorithm/OtherRelatedProblem$PrintThread$2.class
 algorithm/LinkedListProblem.class
 algorithm/SwordCode$Codec.class
 algorithm/PersonalProgress5$PersonalProgress5_1.class
-algorithm/Solution6.class
 algorithm/Solution62.class
 algorithm/Solution113.class
+algorithm/PersonalProgressProblem.class
 algorithm/BigDataRelatedProblem.class

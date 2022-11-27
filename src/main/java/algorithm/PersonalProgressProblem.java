@@ -14,7 +14,7 @@ import java.util.*;
  * <p>
  * 2. 测试相关的算法思想理解情况
  */
-public class PersonalTest {
+public class PersonalProgressProblem {
 
     public static void main(String[] args) {
         PersonalProgress14 progress14 = new PersonalProgress14();
