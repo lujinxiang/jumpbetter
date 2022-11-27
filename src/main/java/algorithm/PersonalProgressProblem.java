@@ -3,7 +3,7 @@ package algorithm;
 import common.ArrayUtil;
 import common.TreeNode;
 import javafx.util.Pair;
-import leetcode.problem.ListNode;
+import leetcode.ListNode;
 
 import java.util.*;
 
@@ -2952,6 +2952,32 @@ class PersonalProgress7 {
  * 数组相关
  */
 class PersonalProgress8 {
+
+
+    /**
+     * 移动零
+     * <p>
+     * 思路：双指针遍历一次
+     * 1.找不为0的数字，然后从位置index=0处开始覆写非0的数据;
+     * <p>
+     * 完成情况：done
+     *
+     * @param nums
+     */
+    public void moveZeroes(int[] nums) {
+        //从前往后覆写
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[index++] = nums[i];
+            }
+        }
+        //从当前index处往后开始设置0;
+        for (int i = index; i < nums.length; i++) {
+            nums[i] = 0;
+        }
+        return;
+    }
 
 
     /**

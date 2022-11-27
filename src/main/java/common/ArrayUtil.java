@@ -37,7 +37,12 @@ public class ArrayUtil {
         System.out.println();
     }
 
-    public static void recursiveArray2(int[][] arr) {
+    /**
+     * 二维数组的遍历
+     *
+     * @param arr
+     */
+    public static void recursiveArray2(boolean[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[0].length; j++) {
                 System.out.print(arr[i][j] + " ");
@@ -45,5 +50,6 @@ public class ArrayUtil {
             System.out.println();
         }
     }
+
 
 }

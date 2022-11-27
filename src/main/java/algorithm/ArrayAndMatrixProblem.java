@@ -8,6 +8,32 @@ import java.util.*;
  * 数组和矩阵相关的问题
  */
 public class ArrayAndMatrixProblem {
+
+
+    /**
+     * 递增的三元子序列
+     * <p>
+     * <p>
+     * 完成情况：done
+     */
+    public boolean increasingTriplet(int[] nums) {
+        //记录三数中的最小数字
+        int small = Integer.MAX_VALUE;
+        //记录中间的数字
+        int mid = Integer.MAX_VALUE;
+        for (int num : nums) {
+            if (num <= small) {
+                small = num;
+            } else if (num <= mid) {
+                mid = num;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      * 转圈打印矩阵
      * <p>
@@ -612,6 +638,8 @@ public class ArrayAndMatrixProblem {
 
     /**
      * 数组中子数组的最大累乘积
+     * <p>
+     * 完成情况:done
      * <p>
      * 题目：给定一个double类型的数组arr 其中的元素可正、可负、可0 返回子数组累乘的最大乘积
      */

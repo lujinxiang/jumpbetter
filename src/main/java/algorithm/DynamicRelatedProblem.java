@@ -1,26 +1,50 @@
 package algorithm;
 
+import common.ArrayUtil;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * 动态规划相关的问题
+ * <p>
+ * <p>
+ * <p>
+ * <p>
+ * 动态规划专题17题左右 + 如下题目3道左右
+ * <p>
+ * 1.添加最少字符使字符串整体都是回文字符串
+ * 2.括号字符串的有效性和最长有效长度         //可用动态规划求解
+ * 3.回文最少分割数
+ * 4.字符串匹配问题
  */
 public class DynamicRelatedProblem {
 
     public static void main(String[] args) {
+  /*      DynamicRelatedProblem dynamicRelatedProblem = new DynamicRelatedProblem();
+        String palindrome1 = dynamicRelatedProblem.getPalindrome1("A1B21C");
+        System.out.print(palindrome1);*/
 
-        int[] arr = new int[]{1, 3, 6, 7, 9, 4, 10, 5, 6};
-        int a = getMaxLengthSequence(arr);
-        System.out.println(a);
-        int i = climbStairs(3);
-        System.out.println(i);
+/*        Solution solution = new Solution();
+        boolean res = solution.isMatch("abc", "a.c");
+        System.out.print(res);*/
+
+/*        int res = minCut("ACDCDAD");
+        System.out.print(res);*/
+
+        int[][] matrix = new int[][]{
+                {-2, -3, 3},
+                {-5, -10, 1},
+                {0, 30, -5},
+        };
+        int res = minHp(matrix);
+        System.out.print(res);
 
     }
 
     /**
-     * 0-1背包问题
+     * 1.0-1背包问题
      * <p>
      * 题目：有一个背包，它的容量为C（Capacity），现在有n种不同的物品编号分别为0...n-1，
      * 其中每一件物品的重量为w(i)，价值为v(i)。问可以向这个背包中盛放哪些物品，使得在不超过背包容量的基础上，物品的总价值最大。
@@ -59,7 +83,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 矩阵的最小路径和
+     * 2.矩阵的最小路径和
      * <p>
      * 题目：给定一个矩阵m 从左上角开始每次只能向右或者向下走 最后到达右下角的位置 路径上所有的数字累加起来就是路径和
      * 返回所有的路径中最小的路径和
@@ -90,7 +114,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 矩阵的最小和矩阵 空间压缩
+     * 3.矩阵的最小和矩阵 空间压缩
      * <p>
      * 思路：可以用一维数组作为我们的dp数组 滚动更新我们的dp数组 不可回溯
      * <p>
@@ -119,7 +143,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 换钱的最少货币数
+     * 4.换钱的最少货币数
      * <p>
      * 题目：给定数组arr arr中所有的值都为正数且不重复 每个值代表一种面值的货币 每种面值的货币可以使用任意张
      * 再给定一个整数aim代表要找的钱数 求组成aim的最少货币数
@@ -157,7 +181,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 换钱：指定钱币的数量
+     * 5.换钱：指定钱币的数量
      * <p>
      * 题目：给定数组arr,arr中所有的值都为正数 每个值仅代表一张钱的面值
      * 再给定一个正数aim代表要找的钱数 求组成aim的最少货币数
@@ -190,7 +214,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 换钱的方法数
+     * 6.换钱的方法数
      * <p>
      * 题目：给定数组arr arr中所有的值都为正数且不重复 每个值代表一种面值的货币
      * 每种面值的货币可以使用任意张 再给定一个整数aim代表要找的钱数 求换钱有多少种方法
@@ -337,7 +361,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 最长递增子串
+     * 7.最长递增子串
      * <p>
      * 输入：a-z和0-9
      * 输出：1.不重复 2.有顺序
@@ -397,7 +421,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 最长递增子序列
+     * 8.最长递增子序列
      * <p>
      * 题目：给定数组arr 返回arr的最长递增子序列
      * <p>
@@ -430,7 +454,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 最长公共子序列问题
+     * 9.最长公共子序列问题
      * <p>
      * 题目：给定两个字符串str1和str2 返回两个字符串的最长公共子序列
      * <p>
@@ -474,7 +498,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 最长公共子串
+     * 10.最长公共子串
      * <p>
      * 题目：给定两个字符串str1和str2 返回两个字符串的最长公共子串
      * <p>
@@ -539,7 +563,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 最小编辑代价
+     * 11.最小编辑代价
      * <p>
      * 题目：给定两个字符str1和str2 再给定三个整数ic、dc和rc 分别代表插入、删除和替换一个字符的代价
      * 返回将str1编辑成str2的最小代价
@@ -593,7 +617,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 剪绳子
+     * 12.剪绳子
      * <p>
      * 题目：给你一根长度为n的绳子 请把绳子剪成m段（m、n都是整数，n>1&&m>1）每段绳子的长度记为k[0],k[1],...k[m]
      * 请问k[0]*k[1]*...k[m]可能的最大乘积是多少？
@@ -634,7 +658,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 连续子数组的的最大和
+     * 13.连续子数组的的最大和
      *
      * 题目：输入一个整型数组 数组里有正数也有负数 数组中的一个或连续多个整数组成一个子数组
      * 求所有数组的和的最大值 要求时间复杂度为O(n)
@@ -653,7 +677,7 @@ public class DynamicRelatedProblem {
      */
 
     /**
-     * 跳跃游戏
+     * 14.跳跃游戏
      * <p>
      * 题目：给定数组arr arr[i]==k 代表可以从位置i向右跳1-k个距离；比如arr[2]==3 代表从位置2可以跳到位置3、位置4或位置5
      * 如果从位置0出发 返回最少跳几次能跳到arr最后的位置上
@@ -684,7 +708,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 数组中的最长连续序列
+     * 15.数组中的最长连续序列
      * <p>
      * 题目：给定无序数组arr 返回其中最长的连续序列的长度
      * 例子：arr=[100,4,200,1,3,2] 最长的连续序列为[1,2,3,4] 所以返回4；
@@ -725,7 +749,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 字符串的交错组成
+     * 16.字符串的交错组成
      * <p>
      * 题目：给定三个字符串str1、str2和aim 如果aim包含且仅包含来自str1和str2的所有字符
      * 而且在aim中属于str1的字符之间保持原来在str1中的顺序 属于str2的字符之间保持原来在str2中的顺序
@@ -781,7 +805,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 龙与地下城游戏
+     * 17.龙与地下城游戏
      * <p>
      * 题目：给定一个二维数组map 含义是一张地图 游戏规则如下：
      * 1.骑士从左上角出发 每次只能向右或者向下走 最后到达最右下角见到公主
@@ -824,7 +848,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 房屋抢劫
+     * 18.房屋抢劫
      * <p>
      * 题目：每个房间里都有不同数量的财物，给出能抢劫的最大财物数。这里的唯一限制是不能同时对相邻的房间进行抢劫。
      * <p>
@@ -854,7 +878,9 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 回文最少分割数
+     * 19.回文最少分割数(剑指offer)
+     * <p>
+     * 完成情况：done
      * <p>
      * 题目：给定一个字符串str 返回把str全部切成回文子串的最小分割数
      * <p>
@@ -891,6 +917,7 @@ public class DynamicRelatedProblem {
                 }
             }
         }
+        ArrayUtil.recursiveArray2(p);
         return dp[0];
     }
 
@@ -993,7 +1020,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 题目：最长回文子串
+     * 20.题目：最长回文子串
      * <p>
      * 给你一个字符串 s，找到 s 中最长的回文子串。
      * <p>
@@ -1060,7 +1087,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 题目：最长回文子序列
+     * 21.题目：最长回文子序列
      * <p>
      * 给定⼀个字符串 s ，找到其中最⻓的回⽂⼦序列，并返回该序列的⻓度。可以假设 s 的最⼤⻓度为 1000;
      * <p>
@@ -1108,7 +1135,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 最大子数组和
+     * 22.最大子数组和
      * <p>
      * 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
      * 子数组 是数组中的一个连续部分。
@@ -1172,7 +1199,7 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 题目：不同路径
+     * 23.题目：不同路径
      * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
      * <p>
      * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
@@ -1204,7 +1231,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 题目：爬楼梯问题
+     * 24.题目：爬楼梯问题
      * 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
      * <p>
      * 每次你可以爬 1 或 2 个台阶。你有多少种不同的⽅法可以爬到楼顶呢？
@@ -1237,7 +1264,7 @@ public class DynamicRelatedProblem {
     }
 
     /**
-     * 题目：使用最小花费爬楼梯
+     * 25.题目：使用最小花费爬楼梯
      * 数组的每个下标作为⼀个阶梯，第 i 个阶梯对应着⼀个⾮负数的体⼒花费值 cost[i]（下标从 0 开始）。
      * 每当你爬上⼀个阶梯你都要花费对应的体⼒值，⼀旦⽀付了相应的体⼒值，你就可以选择向上爬⼀个阶
      * 梯或者爬两个阶梯。
@@ -1268,20 +1295,145 @@ public class DynamicRelatedProblem {
 
 
     /**
-     * 题目：添加最少字符使字符串整体都是回文字符串
+     * 26.题目：添加最少字符使字符串整体都是回文字符串
+     * <p>
+     * 完成情况：done
+     * <p>
      * 给定一个字符串str,如果可以在str的任意位置添加字符，请返回在添加字符最少的情况下，让str整体都是回文字符的一种结果；
-     *
+     * <p>
      * case1:str="ABA" str本身就是回文串，不需要添加字符，所以返回"ABA";
      * case2:str="BA",添加B或者A,返回ABA或者BAB
-     *
+     * <p>
      * dp[i][j]:代表子串str[i...j]最少添加几个字符可以使str[i...j]整体都是回文串；
-     *
+     * <p>
      * dp[i][j]= dp[i+1][j-1]; str[i]=str[j]
      * dp[i][j]=Math.min(dp[i][j-1],dp[i+1][j])+1; str[i]!=str[j];
-     *
-     *
      */
+    public String getPalindrome1(String str) {
+        if (str == null || str.length() < 2) {
+            return str;
+        }
+        char[] chas = str.toCharArray();
+        int[][] dp = getDp(chas);
+        char[] res = new char[chas.length + dp[0][chas.length - 1]];
+        int i = 0;
+        int j = chas.length - 1;
+        int resL = 0;
+        int resR = res.length - 1;
+        while (i <= j) {
+            if (chas[i] == chas[j]) {
+                res[resL++] = chas[i++];
+                res[resR--] = chas[j--];
+            } else if (dp[i][j - 1] < dp[i + 1][j]) {
+                res[resL++] = chas[j];
+                res[resR--] = chas[j--];
+            } else {
+                res[resL++] = chas[i];
+                res[resR--] = chas[i++];
+            }
+        }
+        return String.valueOf(res);
+    }
 
+    private int[][] getDp(char[] str) {
+        int[][] dp = new int[str.length][str.length];
+        for (int j = 1; j < str.length; j++) {
+            dp[j - 1][j] = str[j - 1] == str[j] ? 0 : 1;
+            for (int i = j - 2; i > -1; i--) {
+                if (str[i] == str[j]) {
+                    dp[i][j] = dp[i + 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i + 1][j], dp[i][j - 1]) + 1;
+                }
+            }
+        }
+        return dp;
+    }
+
+
+    /**
+     * 27.题目：字符串匹配问题
+     * <p>
+     * 给你一个字符串s和一个字符规律p，请你来实现一个支持 '.'和'*'的正则表达式匹配。
+     * <p>
+     * '.' 匹配任意单个字符
+     * '*' 匹配零个或多个前面的那一个元素
+     * 所谓匹配，是要涵盖整个字符串s的，而不是部分字符串。
+     */
+    static class Solution {
+        public boolean isMatch(String str, String pattern) {
+            if (str == null || pattern == null) {
+                return false;
+            }
+            char[] chars = str.toCharArray();
+            char[] patterns = pattern.toCharArray();
+            return isValid(chars, patterns) ? process(chars, patterns, 0, 0) : false;
+        }
+
+        /**
+         * text和pattern的有效性判断
+         *
+         * @param str
+         * @param pattern
+         * @return
+         */
+        private boolean isValid(char[] str, char[] pattern) {
+            //text中不能包含'*'或者'.';
+            for (int i = 0; i < str.length; i++) {
+                if (str[i] == '*' || str[i] == '.') {
+                    return false;
+                }
+            }
+            //pattern中不能是首字符；任意两个'*'字符不相邻；
+            for (int i = 0; i < pattern.length; i++) {
+                if (pattern[i] == '*' && (i == 0 || pattern[i - 1] == '*')) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private boolean process(char[] str, char[] pattern, int strIndex, int patternIndex) {
+            if (patternIndex == pattern.length) {
+                return strIndex == str.length;
+            }
+            if (patternIndex + 1 == pattern.length || pattern[patternIndex + 1] != '*') {
+                return strIndex != str.length
+                        && (pattern[patternIndex] == str[strIndex] || pattern[patternIndex] == '.')
+                        && process(str, pattern, strIndex + 1, patternIndex + 1);
+            }
+            while (strIndex != str.length && (pattern[patternIndex] == str[strIndex] || pattern[patternIndex] == '.')) {
+                if (process(str, pattern, strIndex, patternIndex + 2)) {
+                    return true;
+                }
+                strIndex++;
+            }
+            return process(str, pattern, strIndex, patternIndex + 2);
+        }
+
+
+        /**
+         * 方法二
+         */
+        public boolean isMatch2(String text, String pattern) {
+            //如果都为空则匹配成功
+            if (pattern.isEmpty()) return text.isEmpty();
+
+            //第一个是否匹配上
+            boolean first_match = (!text.isEmpty() &&
+                    (pattern.charAt(0) == text.charAt(0) || pattern.charAt(0) == '.'));
+
+            if (pattern.length() >= 2 && pattern.charAt(1) == '*') {
+                //看看有没有可能剩下的pattern匹配上全部的text
+                //看看有没有可能剩下的text匹配整个pattern
+                return (isMatch2(text, pattern.substring(2)) ||
+                        (first_match && isMatch2(text.substring(1), pattern)));
+            } else {
+                //没有星星的情况：第一个字符相等，而且剩下的text匹配上剩下的pattern
+                return first_match && isMatch2(text.substring(1), pattern.substring(1));
+            }
+        }
+    }
 
 
 }

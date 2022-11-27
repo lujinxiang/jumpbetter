@@ -1,9 +1,6 @@
 package algorithm;
 
-import common.TreeNode;
-import leetcode.problem.ListNode;
-
-import java.util.List;
+import leetcode.ListNode;
 
 /**
  * 4.递归相关的问题

@@ -2,12 +2,17 @@ package algorithm;
 
 import common.Node;
 import common.TreeNode;
-import leetcode.problem.ListNode;
+import leetcode.ListNode;
 
 import java.util.List;
 
 /**
  * 剑指offer训练
+ * <p>
+ * desc:
+ * 1.思路
+ * 2.代码
+ * 3.还原书本
  *
  * @Author jinxianglu
  */
