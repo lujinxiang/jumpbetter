@@ -3,7 +3,7 @@ package algorithm;
 import common.ArrayUtil;
 import common.TreeNode;
 import javafx.util.Pair;
-import leetcode.ListNode;
+import common.ListNode;
 
 import java.util.*;
 
@@ -17,8 +17,14 @@ import java.util.*;
 public class PersonalProgressProblem {
 
     public static void main(String[] args) {
+/*
         PersonalProgress14 progress14 = new PersonalProgress14();
         List<String> res = progress14.addOperators("123", 6);
+        System.out.print(res);
+*/
+
+
+        int res = minLength("adabbca", "acb");
         System.out.print(res);
 
 
@@ -235,6 +241,37 @@ public class PersonalProgressProblem {
         int[] nums = new int[]{1, 1, 1, 1, 1};
         progress17_1.findTargetSumWays(nums, 3);*/
     }
+
+
+    public static int minLength(String str1, String str2) {
+        char[] chas1 = str1.toCharArray();
+        char[] chas2 = str2.toCharArray();
+        int[] map = new int[256];
+        for (int i = 0; i != chas2.length; i++) {
+            map[chas2[i]]++;
+        }
+        int left = 0;
+        int right = 0;
+        int match = chas2.length;
+        int minLen = Integer.MAX_VALUE;
+        while (right != chas1.length) {
+            map[chas1[right]]--;
+            if (map[chas1[right]] >= 0) {
+                match--;
+            }
+            if (match == 0) {
+                while (map[chas1[left]] < 0) {
+                    map[chas1[left++]]++;
+                }
+                minLen = Math.min(minLen, right - left + 1);
+                match++;
+                map[chas1[left++]]++;
+            }
+            right++;
+        }
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
+    }
+
 
     /**
      * 全排列 问题

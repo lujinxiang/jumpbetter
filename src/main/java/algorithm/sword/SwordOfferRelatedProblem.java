@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.sword;
 
 import common.ArrayUtil;
 import common.Node;

@@ -1,6 +1,6 @@
 package algorithm;
 
-import leetcode.ListNode;
+import common.ListNode;
 
 /**
  * 4.递归相关的问题

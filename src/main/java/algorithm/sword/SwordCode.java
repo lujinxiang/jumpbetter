@@ -1,8 +1,8 @@
-package algorithm;
+package algorithm.sword;
 
 import common.Node;
 import common.TreeNode;
-import leetcode.ListNode;
+import common.ListNode;
 
 import java.util.List;
 
@@ -21,14 +21,22 @@ public class SwordCode {
 
     /**
      * 1.数组中重复的数字
+     * <p>
+     * 题目：
+     * 在一个长度为n的数组里的所有数字都在0~n-1的范围内。数组中某些数字是重复的，
+     * 但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+     * <p>
+     * 思路：
+     * 0 1 2 ..... i.....n
+     * step1：下标i位置的值为m
+     * step2: m==i,继续扫描
+     * step3: m!=i,比较m和m位置的值，如果相等，则返回重复的数字，不相等则交换i位置和m位置的值；
      *
      * @param nums
      * @return
      */
-    public int findRepeatNumber(int[] nums) {
-
-
-        return 0;
+    public boolean findRepeatNumber(int[] nums) {
+        return false;
     }
 
 
