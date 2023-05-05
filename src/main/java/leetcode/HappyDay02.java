@@ -2,6 +2,9 @@ package leetcode;
 
 import common.ListNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author jinxianglu
  */
@@ -10,9 +13,9 @@ public class HappyDay02 {
 
     public static void main(String[] args) {
         HappyDay02 happyDay02 = new HappyDay02();
-        int[] arr = new int[]{5, 7, 7, 8, 8, 10};
-        int[] res = happyDay02.searchRange(arr, 8);
-        System.out.print(res);
+
+        List<String> strings = happyDay02.generateParenthesis(2);
+        System.out.print(strings);
     }
 
 
@@ -200,8 +203,36 @@ public class HappyDay02 {
         return res;
     }
 
-
-    public int divide(int dividend, int divisor) {
-        return 0;
+    /**
+     * 括号生成
+     * @param n
+     * @return
+     */
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        if (n <= 0) {
+            return res;
+        }
+        dfs(n, "", res, 0, 0);
+        return res;
     }
+
+    private void dfs(int n, String path, List<String> res, int open, int close) {
+        // open记录左括号的个数；
+        // close记录右括号的个数；
+        if (open > n || close > open) {
+            return;
+        }
+
+        if (path.length() == 2 * n) {
+            res.add(path);
+            return;
+        }
+
+        dfs(n, path + "(", res, open + 1, close);
+        dfs(n, path + ")", res, open, close + 1);
+
+    }
+
+
 }
