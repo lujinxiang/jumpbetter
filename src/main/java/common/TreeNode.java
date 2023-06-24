@@ -29,17 +29,17 @@ public class TreeNode {
     public static TreeNode getTree() {
         TreeNode root = new TreeNode(1);
         TreeNode left = new TreeNode(2);
-        TreeNode right = new TreeNode(3);
+//        TreeNode right = new TreeNode(3);
         TreeNode left1 = new TreeNode(4);
-        TreeNode right1 = new TreeNode(5);
-        TreeNode left2 = new TreeNode(6);
-        TreeNode right2 = new TreeNode(7);
+//        TreeNode right1 = new TreeNode(5);
+//        TreeNode left2 = new TreeNode(6);
+//        TreeNode right2 = new TreeNode(7);
         root.left = left;
-        root.right = right;
+//        root.right = right;
         left.left = left1;
-        left.right = right1;
-        right.left = left2;
-        right.right = right2;
+//        left.right = right1;
+//        right.left = left2;
+//        right.right = right2;
         return root;
     }
 
